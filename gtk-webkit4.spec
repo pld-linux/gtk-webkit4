@@ -93,14 +93,14 @@ Requires:	pango >= 1:1.32.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # __once_call, __once_called non-function symbols from libstdc++
-%define		skip_post_check_so	lib.*gtk-3.0.*
+%define		skip_post_check_so	lib.*gtk-4.0.*
 
 %description
-gtk-webkit3 is a port of the WebKit embeddable web component to GTK+
+gtk-webkit4 is a port of the WebKit embeddable web component to GTK+
 3.
 
 %description -l pl.UTF-8
-gtk-webkit3 to port osadzalnego komponentu WWW WebKit do GTK+ 3.
+gtk-webkit4 to port osadzalnego komponentu WWW WebKit do GTK+ 3.
 
 %package devel
 Summary:	Development files for WebKit for GTK+ 3
@@ -174,7 +174,12 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%find_lang WebKitGTK-4.0
+%if "%{_gtkdocdir}" != "%{_datadir}/gtk-doc/html"
+install -d $RPM_BUILD_ROOT%{_gtkdocdir}
+%{__mv} $RPM_BUILD_ROOT%{_datadir}/gtk-doc/html/* $RPM_BUILD_ROOT%{_gtkdocdir}
+%endif
+
+%find_lang WebKit2GTK-4.0
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -182,7 +187,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files -f WebKitGTK-4.0.lang
+%files -f WebKit2GTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
 %attr(755,root,root) %{_bindir}/jsc
@@ -202,9 +207,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitWebProcess
 %dir %{_libdir}/webkit2gtk-4.0/injected-bundle
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/injected-bundle/libwebkit2gtkinjectedbundle.so
-%dir %{_datadir}/webkitgtk-3.0
-%{_datadir}/webkitgtk-3.0/images
-%{_datadir}/webkitgtk-3.0/resources
 
 %files devel
 %defattr(644,root,root,755)
