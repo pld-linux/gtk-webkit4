@@ -4,6 +4,7 @@
 # - FTL_JIT (BR: llvm, libcxxabi?)
 #
 # Conditional build:
+%bcond_without	gtk2		# WebKitPluginProcess2 to load GTK+ 2.x based plugins
 %bcond_without	introspection	# disable introspection
 %bcond_with	seccomp		# seccomp filters (broken as of 2.6.5)
 %bcond_with	wayland		# Wayland target (broken as of 2.6.[0-5])
@@ -12,7 +13,7 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 Version:	2.6.5
-Release:	0.1
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	http://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
@@ -42,8 +43,7 @@ BuildRequires:	gperf >= 3.0.1
 BuildRequires:	gstreamer-devel >= 1.0.3
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0.3
 BuildRequires:	libstdc++-devel >= 6:4.7
-# GTK+ 2.x for webkit2 plugin process; GTK+ 3 for base GUI
-BuildRequires:	gtk+2-devel >= 2:2.24.10
+%{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
 BuildRequires:	gtk+3-devel >= 3.12.0
 BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 0.9.7
@@ -82,7 +82,7 @@ Requires:	freetype >= 1:2.4.2
 Requires:	glib2 >= 1:2.36.0
 Requires:	gstreamer >= 1.0.3
 Requires:	gstreamer-plugins-base >= 1.0.3
-Requires:	gtk+2 >= 2:2.24.10
+%{?with_gtk2:Requires:	gtk+2 >= 2:2.24.10}
 Requires:	gtk+3 >= 3.12.0
 Requires:	harfbuzz >= 0.9.7
 Requires:	libsoup >= 2.42.0
@@ -146,6 +146,8 @@ cd build
 	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
+	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
+	%{!?with_gtk2:-DENABLE_PLUGIN_PROCESS_GTK2=OFF} \
 	%{?with_seccomp:-DENABLE_SECCOMP_FILTERS=ON} \
 	%{?with_wayland:-DENABLE_WAYLAND_TARGET=ON} \
 	-DENABLE_VIDEO=ON \
@@ -153,18 +155,6 @@ cd build
 	-DENABLE_WEBGL=ON \
 	-DPORT=GTK \
 	-DSHOULD_INSTALL_JS_SHELL=ON
-
-#configure \
-#	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
-#	--disable-gtk-doc \
-#	--disable-silent-rules \
-#	--enable-geolocation \
-#	--enable-glx \
-#	%{__enable_disable introspection} \
-#	%{!?with_wayland:--disable-wayland-target} \
-#	--enable-webgl \
-#	--with-gtk=3.0 \
-#	--with-html-dir=%{_gtkdocdir}
 
 %{__make}
 
