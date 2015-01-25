@@ -60,7 +60,7 @@ BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 1:2.6.0
-BuildRequires:	rpmbuild(macros) >= 1.592
+BuildRequires:	rpmbuild(macros) >= 1.699
 BuildRequires:	ruby >= 1.8.7
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
@@ -135,6 +135,8 @@ Dokumentacja API WebKita.
 %build
 install -d build
 cd build
+# ld.bfd cannot handle so huge shared libs (when building with debug info)
+LDFLAGS="%{rpmldflags} -fuse-ld=gold"
 %cmake .. \
 	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
