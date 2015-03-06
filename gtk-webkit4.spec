@@ -13,11 +13,12 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 Version:	2.6.5
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	http://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
 # Source0-md5:	44addb5ccdace97642cb7656382293bb
+Patch0:		x32.patch
 URL:		http://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -131,6 +132,7 @@ Dokumentacja API WebKita.
 
 %prep
 %setup -q -n webkitgtk-%{version}
+%patch0 -p1
 
 %build
 install -d build
@@ -145,6 +147,9 @@ LDFLAGS="%{rpmldflags} -fuse-ld=gold"
 	%{!?with_gtk2:-DENABLE_PLUGIN_PROCESS_GTK2=OFF} \
 	%{?with_seccomp:-DENABLE_SECCOMP_FILTERS=ON} \
 	%{?with_wayland:-DENABLE_WAYLAND_TARGET=ON} \
+%ifarch x32
+	-DENABLE_JIT=OFF \
+%endif
 	-DENABLE_VIDEO=ON \
 	-DENABLE_WEB_AUDIO=ON \
 	-DENABLE_WEBGL=ON \
