@@ -137,8 +137,12 @@ Dokumentacja API WebKita.
 %build
 install -d build
 cd build
-# ld.bfd cannot handle so huge shared libs (when building with debug info)
+# ld cannot handle so huge shared libs (when building with debug info)
+%ifarch %{x8664}
 LDFLAGS="%{rpmldflags} -fuse-ld=gold"
+%else
+LDFLAGS="%{rpmldflags} -fuse-ld=bfd -Wl,--no-keep-memory"
+%endif
 %cmake .. \
 	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
