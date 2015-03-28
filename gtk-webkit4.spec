@@ -9,11 +9,16 @@
 %bcond_with	seccomp		# seccomp filters (broken as of 2.6.5)
 %bcond_with	wayland		# Wayland target (broken as of 2.6.[0-5])
 #
+# it's not possible to build this with debuginfo on 32bit archs due to
+# memory constraints during linking
+%ifarch %{ix86} x32
+%define		_enable_debug_packages		0
+%endif
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 Version:	2.8.0
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	http://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
@@ -137,12 +142,7 @@ Dokumentacja API WebKita.
 %build
 install -d build
 cd build
-# ld cannot handle so huge shared libs (when building with debug info)
-%ifarch %{x8664}
 LDFLAGS="%{rpmldflags} -fuse-ld=gold"
-%else
-LDFLAGS="%{rpmldflags} -fuse-ld=bfd -Wl,--no-keep-memory"
-%endif
 %cmake .. \
 	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
