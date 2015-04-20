@@ -17,12 +17,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.8.0
-Release:	2
+Version:	2.8.1
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	http://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	fade95513ecd47b68c8cdaeb1add9cd3
+# Source0-md5:	25459ad6646e3cae4b38e7612af9c0bf
 Patch0:		x32.patch
 URL:		http://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
@@ -55,6 +55,7 @@ BuildRequires:	harfbuzz-devel >= 0.9.7
 BuildRequires:	harfbuzz-icu-devel >= 0.9.7
 BuildRequires:	libicu-devel >= 4.2.1
 BuildRequires:	libjpeg-devel
+BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
 BuildRequires:	libsoup-devel >= 2.42.0
@@ -65,7 +66,7 @@ BuildRequires:	libxslt-devel >= 1.1.7
 BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
-BuildRequires:	python >= 1:2.6.0
+BuildRequires:	python >= 1:2.7.0
 BuildRequires:	rpmbuild(macros) >= 1.699
 BuildRequires:	ruby >= 1.8.7
 BuildRequires:	sqlite3-devel >= 3
@@ -142,7 +143,6 @@ Dokumentacja API WebKita.
 %build
 install -d build
 cd build
-LDFLAGS="%{rpmldflags} -fuse-ld=gold"
 %cmake .. \
 	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
