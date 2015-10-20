@@ -2,6 +2,7 @@
 # - GAMEPAD
 # - BATTERY_STATUS (BR: upower-devel)
 # - FTL_JIT (BR: llvm, libcxxabi?)
+# - MEDIA_STREAM (BR: openwebrtc)
 #
 # Conditional build:
 %bcond_without	gtk2		# WebKitPluginProcess2 to load GTK+ 2.x based plugins
@@ -17,12 +18,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.8.1
-Release:	2
+Version:	2.10.2
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	http://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	25459ad6646e3cae4b38e7612af9c0bf
+# Source0-md5:	892e3077ad6c10c8233e7e8b5497cd7a
 Patch0:		x32.patch
 URL:		http://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
@@ -32,12 +33,12 @@ BuildRequires:	at-spi2-core-devel >= 2.6.0
 BuildRequires:	atk-devel
 BuildRequires:	bison >= 2.3
 BuildRequires:	cairo-devel >= 1.10.2
-BuildRequires:	cmake >= 2.8.8
+BuildRequires:	cmake >= 2.8.12
 BuildRequires:	enchant-devel >= 0.22
 BuildRequires:	flex >= 2.5.34
 BuildRequires:	fontconfig-devel >= 2.8.0
 BuildRequires:	freetype-devel >= 1:2.4.2
-BuildRequires:	gcc-c++ >= 6:4.7
+BuildRequires:	gcc-c++ >= 6:4.9
 BuildRequires:	geoclue2-devel >= 2.1.5
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.36.0
@@ -47,19 +48,19 @@ BuildRequires:	gnutls-devel >= 3.0.0
 BuildRequires:	gperf >= 3.0.1
 BuildRequires:	gstreamer-devel >= 1.0.3
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0.3
-BuildRequires:	libstdc++-devel >= 6:4.7
 %{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
 BuildRequires:	gtk+3-devel >= 3.12.0
 BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 0.9.7
 BuildRequires:	harfbuzz-icu-devel >= 0.9.7
+BuildRequires:	hyphen-devel
 BuildRequires:	libicu-devel >= 4.2.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
 BuildRequires:	libsoup-devel >= 2.42.0
-BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel >= 6:4.9
 BuildRequires:	libwebp-devel
 BuildRequires:	libxml2-devel >= 1:2.8.0
 BuildRequires:	libxslt-devel >= 1.1.7
@@ -113,7 +114,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.36.0
 Requires:	gtk+3-devel >= 3.12.0
 Requires:	libsoup-devel >= 2.42.0
-Requires:	libstdc++-devel
+Requires:	libstdc++-devel >= 6:4.9
 
 %description devel
 Development files for WebKit for GTK+ 3.
@@ -195,6 +196,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/girepository-1.0/WebKit2WebExtension-4.0.typelib
 %endif
 %dir %{_libdir}/webkit2gtk-4.0
+%attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitDatabaseProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitPluginProcess2
