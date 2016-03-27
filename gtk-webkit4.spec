@@ -45,7 +45,6 @@ BuildRequires:	geoclue2-devel >= 2.1.5
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.36.0
 BuildRequires:	glibc-misc
-BuildRequires:	gnutls-devel >= 3.0.0
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
 BuildRequires:	gstreamer-devel >= 1.0.3
