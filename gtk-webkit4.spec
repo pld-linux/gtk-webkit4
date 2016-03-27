@@ -28,13 +28,14 @@ Patch0:		x32.patch
 URL:		http://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
-BuildRequires:	OpenGLESv2-devel
 BuildRequires:	OpenGL-GLX-devel
+BuildRequires:	OpenGLESv2-devel
 BuildRequires:	at-spi2-core-devel >= 2.6.0
 BuildRequires:	atk-devel
 BuildRequires:	bison >= 2.3
 BuildRequires:	cairo-devel >= 1.10.2
 BuildRequires:	cmake >= 2.8.12
+BuildRequires:	docbook-dtd412-xml
 BuildRequires:	enchant-devel >= 0.22
 BuildRequires:	flex >= 2.5.34
 BuildRequires:	fontconfig-devel >= 2.8.0
@@ -48,6 +49,7 @@ BuildRequires:	gnutls-devel >= 3.0.0
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
 BuildRequires:	gstreamer-devel >= 1.0.3
+BuildRequires:	gstreamer-plugins-bad-devel >= 1.6.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0.3
 %{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
 BuildRequires:	gtk+3-devel >= 3.12.0
@@ -70,7 +72,8 @@ BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 1:2.7.0
 BuildRequires:	rpmbuild(macros) >= 1.699
-BuildRequires:	ruby >= 1.8.7
+BuildRequires:	ruby >= 1:1.9
+BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
 #BuildRequires:	udev-glib-devel
