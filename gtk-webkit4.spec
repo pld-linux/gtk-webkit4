@@ -1,14 +1,14 @@
 # TODO: review configure options:
-# - GAMEPAD
 # - BATTERY_STATUS (BR: upower-devel)
-# - FTL_JIT (BR: llvm, libcxxabi?)
+# - FTL_JIT on !x86_64?
 # - MEDIA_STREAM (BR: openwebrtc)
 #
 # Conditional build:
 %bcond_without	gtk2		# WebKitPluginProcess2 to load GTK+ 2.x based plugins
 %bcond_without	introspection	# disable introspection
+%bcond_with	cairogl		# accelerated 2D canvas using cairo-gl
 %bcond_with	seccomp		# seccomp filters (broken as of 2.6.5)
-%bcond_with	wayland		# Wayland target (broken as of 2.6.[0-5])
+%bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
 # memory constraints during linking
@@ -69,13 +69,17 @@ BuildRequires:	libxslt-devel >= 1.1.7
 BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
+%if %{with cairogl}
+BuildRequires:	pkgconfig(cairo-egl)
+BuildRequires:	pkgconfig(cairo-gl)
+BuildRequires:	pkgconfig(cairo-glx)
+%endif
 BuildRequires:	python >= 1:2.7.0
 BuildRequires:	rpmbuild(macros) >= 1.699
 BuildRequires:	ruby >= 1:1.9
 BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
-#BuildRequires:	udev-glib-devel
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXrender-devel
@@ -97,6 +101,8 @@ Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	pango >= 1:1.32.0
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
+# Source/JavaScriptCore/CMakeLists.txt /WTF_CPU_
+ExclusiveArch:	%{ix86} %{x8664} x32 arm aarch64 hppa mips ppc ppc64 s390 s390x sh4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # __once_call, __once_called non-function symbols from libstdc++
@@ -148,13 +154,14 @@ Dokumentacja API WebKita.
 install -d build
 cd build
 %cmake .. \
+	%{?with_cairogl:-DENABLE_ACCELERATED_2D_CANVAS=ON} \
 	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
 	%{!?with_gtk2:-DENABLE_PLUGIN_PROCESS_GTK2=OFF} \
 	%{?with_seccomp:-DENABLE_SECCOMP_FILTERS=ON} \
-	%{?with_wayland:-DENABLE_WAYLAND_TARGET=ON} \
+	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
 %ifarch x32
 	-DENABLE_JIT=OFF \
 %endif
