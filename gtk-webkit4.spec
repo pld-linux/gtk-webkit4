@@ -18,12 +18,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.14.0
+Version:	2.14.1
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	20f21f48677559750581471c7aeb8648
+# Source0-md5:	8d6c60dc41604d3bbd43165a674c07e5
 Patch0:		x32.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
@@ -102,7 +102,7 @@ Requires:	libxslt >= 1.1.7
 Requires:	pango >= 1:1.32.0
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
 # Source/JavaScriptCore/CMakeLists.txt /WTF_CPU_
-ExclusiveArch:	%{ix86} %{x8664} x32 arm aarch64 hppa mips ppc ppc64 s390 s390x sh4
+ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa mips ppc ppc64 ppc64le s390 s390x sh4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # __once_call, __once_called non-function symbols from libstdc++
@@ -195,7 +195,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -f WebKit2GTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
-%attr(755,root,root) %{_bindir}/jsc
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.0.so.37
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
@@ -211,6 +210,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitPluginProcess2
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitWebProcess
+%attr(755,root,root) %{_libdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0/injected-bundle
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/injected-bundle/libwebkit2gtkinjectedbundle.so
 
