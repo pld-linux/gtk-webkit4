@@ -18,12 +18,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.14.5
-Release:	2
+Version:	2.16.0
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	7fe3cb2699e64f969b285823c5ae2516
+# Source0-md5:	575edee5f4d62ffd80ad68b9b9893933
 Patch0:		x32.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
