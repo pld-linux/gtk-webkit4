@@ -17,8 +17,8 @@
  #else
      typedef wchar_t JSChar;
  #endif
---- webkitgtk-2.16.1/Source/WebKit2/Shared/API/c/WKString.h.orig	2017-02-20 17:20:17.000000000 +0100
-+++ webkitgtk-2.16.1/Source/WebKit2/Shared/API/c/WKString.h	2017-04-22 14:35:56.853196170 +0200
+--- webkitgtk-2.16.1/Source/WebKit/Shared/API/c/WKString.h.orig	2017-02-20 17:20:17.000000000 +0100
++++ webkitgtk-2.16.1/Source/WebKit/Shared/API/c/WKString.h	2017-04-22 14:35:56.853196170 +0200
 @@ -28,6 +28,7 @@
  
  #include <WebKit/WKBase.h>

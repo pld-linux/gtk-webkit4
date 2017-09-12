@@ -18,12 +18,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.16.1
-Release:	2
+Version:	2.18.0
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	d3bcf995a667fd9febb9ab991acf0ca7
+# Source0-md5:	10d86dd5a5b68875654cc38af139f382
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 URL:		https://webkitgtk.org/
@@ -197,6 +197,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f WebKit2GTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
+%attr(755,root,root) %{_bindir}/WebKitWebDriver
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.0.so.37
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
@@ -207,10 +208,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/girepository-1.0/WebKit2WebExtension-4.0.typelib
 %endif
 %dir %{_libdir}/webkit2gtk-4.0
-%attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitDatabaseProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitPluginProcess2
+%attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitStorageProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0/injected-bundle
