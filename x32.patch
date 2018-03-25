@@ -17,3 +17,14 @@ Index: webkitgtk/Source/WTF/wtf/Platform.h
  #define WTF_CPU_X86_SSE2 1
  #define WTF_CPU_KNOWN 1
  #endif
+--- webkitgtk-2.20.0/Source/bmalloc/bmalloc/Gigacage.h~	2018-02-19 08:45:33.000000000 +0100
++++ webkitgtk-2.20.0/Source/bmalloc/bmalloc/Gigacage.h	2018-03-25 22:11:46.796222047 +0200
+@@ -56,7 +56,7 @@
+ #define STRING_GIGACAGE_MASK GIGACAGE_SIZE_TO_MASK(STRING_GIGACAGE_SIZE)
+ 
+ #if ((BOS(DARWIN) || BOS(LINUX)) && \
+-    (BCPU(X86_64) || (BCPU(ARM64) && !defined(__ILP32__) && (!BPLATFORM(IOS) || __IPHONE_OS_VERSION_MIN_REQUIRED >= 110300))))
++    ((BCPU(X86_64) && !defined(__ILP32__)) || (BCPU(ARM64) && !defined(__ILP32__) && (!BPLATFORM(IOS) || __IPHONE_OS_VERSION_MIN_REQUIRED >= 110300))))
+ #define GIGACAGE_ENABLED 1
+ #else
+ #define GIGACAGE_ENABLED 0
