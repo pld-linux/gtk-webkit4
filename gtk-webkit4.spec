@@ -18,12 +18,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.20.0
-Release:	2
+Version:	2.22.3
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	51cc47345c3ec53802718cd6fc9b746f
+# Source0-md5:	6dae6837c884a25413fb1d4527c9894a
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 URL:		https://webkitgtk.org/
@@ -57,6 +57,7 @@ BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 0.9.7
 BuildRequires:	harfbuzz-icu-devel >= 0.9.7
 BuildRequires:	hyphen-devel
+BuildRequires:	libepoxy-devel
 BuildRequires:	libicu-devel >= 59
 BuildRequires:	libjpeg-devel
 BuildRequires:	libnotify-devel
