@@ -49,6 +49,7 @@ BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
 BuildRequires:	gstreamer-devel >= 1.2.3
+BuildRequires:	gstreamer-gl-devel >= 1.8.3
 BuildRequires:	gstreamer-plugins-bad-devel >= 1.6.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.2.3
 %{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
