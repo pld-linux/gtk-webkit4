@@ -1,13 +1,11 @@
 # TODO: review configure options:
-# - BATTERY_STATUS (BR: upower-devel)
 # - FTL_JIT on !x86_64?
-# - MEDIA_STREAM (BR: openwebrtc)
+# - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
 #
 # Conditional build:
 %bcond_without	gtk2		# WebKitPluginProcess2 to load GTK+ 2.x based plugins
 %bcond_without	introspection	# disable introspection
 %bcond_with	cairogl		# accelerated 2D canvas using cairo-gl
-%bcond_with	seccomp		# seccomp filters (broken as of 2.6.5)
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
@@ -18,57 +16,60 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.22.3
-Release:	2
+Version:	2.24.1
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	6dae6837c884a25413fb1d4527c9894a
+# Source0-md5:	ed70e2bf2476a58b17df3d051f42ce6a
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
 BuildRequires:	OpenGL-GLX-devel
-BuildRequires:	OpenGLESv2-devel
 BuildRequires:	at-spi2-core-devel >= 2.6.0
 BuildRequires:	atk-devel
 BuildRequires:	bison >= 2.3
-BuildRequires:	cairo-devel >= 1.10.2
-BuildRequires:	cmake >= 2.8.12
+BuildRequires:	cairo-devel >= 1.16.0
+BuildRequires:	cmake >= 3.3
 BuildRequires:	docbook-dtd412-xml
-BuildRequires:	enchant-devel >= 0.22
+BuildRequires:	enchant2-devel >= 2
 BuildRequires:	flex >= 2.5.34
-BuildRequires:	fontconfig-devel >= 2.8.0
-BuildRequires:	freetype-devel >= 1:2.4.2
-BuildRequires:	gcc-c++ >= 6:4.9
+BuildRequires:	fontconfig-devel >= 2.13.0
+BuildRequires:	freetype-devel >= 1:2.9.0
+BuildRequires:	gcc-c++ >= 6:6.0.0
 BuildRequires:	geoclue2-devel >= 2.1.5
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.36.0
+BuildRequires:	glib2-devel >= 1:2.40
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
-BuildRequires:	gstreamer-devel >= 1.2.3
+BuildRequires:	gstreamer-devel >= 1.14
 BuildRequires:	gstreamer-gl-devel >= 1.8.3
-BuildRequires:	gstreamer-plugins-bad-devel >= 1.6.0
-BuildRequires:	gstreamer-plugins-base-devel >= 1.2.3
+# mpegts with -DUSE_GSTREAMER_MPEGTS=ON
+#BuildRequires:	gstreamer-plugins-bad-devel >= 1.8.3
+# app,audio,fft,pbutils,tag,video
+BuildRequires:	gstreamer-plugins-base-devel >= 1.8.3
 %{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
 BuildRequires:	gtk+3-devel >= 3.12.0
 BuildRequires:	gtk-doc >= 1.10
-BuildRequires:	harfbuzz-devel >= 0.9.7
-BuildRequires:	harfbuzz-icu-devel >= 0.9.7
+BuildRequires:	harfbuzz-devel >= 1.4.2
+BuildRequires:	harfbuzz-icu-devel >= 1.4.2
 BuildRequires:	hyphen-devel
-BuildRequires:	libepoxy-devel
+BuildRequires:	libgcrypt-devel >= 1.7.0
 BuildRequires:	libicu-devel >= 59
 BuildRequires:	libjpeg-devel
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
-BuildRequires:	libsoup-devel >= 2.42.0
-BuildRequires:	libstdc++-devel >= 6:4.9
+BuildRequires:	libsoup-devel >= 2.48
+BuildRequires:	libstdc++-devel >= 6:6.0.0
+BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	libxml2-devel >= 1:2.8.0
 BuildRequires:	libxslt-devel >= 1.1.7
+BuildRequires:	openjpeg2-devel >= 2.2.0
 BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
@@ -83,27 +84,28 @@ BuildRequires:	ruby >= 1:1.9
 BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
-BuildRequires:	woff2-devel
+BuildRequires:	woff2-devel >= 1.0.2
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	xz
 BuildRequires:	zlib-devel
-Requires:	cairo >= 1.10.2
-Requires:	enchant >= 0.22
-Requires:	fontconfig-libs >= 2.8.0
-Requires:	freetype >= 1:2.4.2
-Requires:	glib2 >= 1:2.36.0
+Requires:	cairo >= 1.16.0
+Requires:	fontconfig-libs >= 2.13.0
+Requires:	freetype >= 1:2.9.0
+Requires:	glib2 >= 1:2.40
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
 %{?with_gtk2:Requires:	gtk+2 >= 2:2.24.10}
 Requires:	gtk+3 >= 3.12.0
-Requires:	harfbuzz >= 0.9.7
-Requires:	libsoup >= 2.42.0
+Requires:	harfbuzz >= 1.4.2
+Requires:	libsoup >= 2.48
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
+Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
+Requires:	woff2 >= 1.0.2
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
 # Source/JavaScriptCore/CMakeLists.txt /WTF_CPU_
 ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa mips ppc ppc64 ppc64le s390 s390x sh4
@@ -124,9 +126,9 @@ Summary:	Development files for WebKit for GTK+ 3
 Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK+ 3
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.36.0
+Requires:	glib2-devel >= 1:2.40
 Requires:	gtk+3-devel >= 3.12.0
-Requires:	libsoup-devel >= 2.42.0
+Requires:	libsoup-devel >= 2.48
 Requires:	libstdc++-devel >= 6:4.9
 
 %description devel
@@ -160,12 +162,10 @@ install -d build
 cd build
 %cmake .. \
 	%{?with_cairogl:-DENABLE_ACCELERATED_2D_CANVAS=ON} \
-	-DENABLE_CREDENTIAL_STORAGE=ON \
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
 	%{!?with_gtk2:-DENABLE_PLUGIN_PROCESS_GTK2=OFF} \
-	%{?with_seccomp:-DENABLE_SECCOMP_FILTERS=ON} \
 	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
 %ifarch x32
 	-DENABLE_JIT=OFF \
@@ -173,6 +173,9 @@ cd build
 	-DENABLE_VIDEO=ON \
 	-DENABLE_WEB_AUDIO=ON \
 	-DENABLE_WEBGL=ON \
+%ifarch %{ix86} %{x8664} x32
+	-DHAVE_SSE2_EXTENSIONS=ON \
+%endif
 	-DPORT=GTK \
 	-DSHOULD_INSTALL_JS_SHELL=ON
 
@@ -210,11 +213,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/girepository-1.0/WebKit2-4.0.typelib
 %{_libdir}/girepository-1.0/WebKit2WebExtension-4.0.typelib
 %endif
+%if "%{_libexecdir}" != "%{_libdir}"
 %dir %{_libexecdir}/webkit2gtk-4.0
+%endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess2
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitStorageProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0
@@ -237,5 +241,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files apidocs
 %defattr(644,root,root,755)
+%{_gtkdocdir}/jsc-glib-4.0
 %{_gtkdocdir}/webkit2gtk-4.0
 %{_gtkdocdir}/webkitdomgtk-4.0
