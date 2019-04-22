@@ -24,6 +24,7 @@ Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
 # Source0-md5:	ed70e2bf2476a58b17df3d051f42ce6a
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
+Patch2:		%{name}-gir.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -156,6 +157,7 @@ Dokumentacja API WebKita.
 %setup -q -n webkitgtk-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 install -d build
