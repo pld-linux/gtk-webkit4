@@ -20,11 +20,11 @@ Index: webkitgtk/Source/WTF/wtf/Platform.h
 --- webkitgtk-2.24.1/Source/bmalloc/bmalloc/Gigacage.h.orig	2019-04-20 18:12:00.719079717 +0200
 +++ webkitgtk-2.24.1/Source/bmalloc/bmalloc/Gigacage.h	2019-04-20 18:17:04.960764832 +0200
 @@ -35,7 +35,7 @@
+ #include <cstddef>
  #include <inttypes.h>
  
- #if ((BOS(DARWIN) || BOS(LINUX)) && \
--(BCPU(X86_64) || (BCPU(ARM64) && !defined(__ILP32__) && (!BPLATFORM(IOS_FAMILY) || BPLATFORM(IOS)))))
-+((BCPU(X86_64) && !defined(__ILP32__)) || (BCPU(ARM64) && !defined(__ILP32__) && (!BPLATFORM(IOS_FAMILY) || BPLATFORM(IOS)))))
+-#if ((BOS(DARWIN) || BOS(LINUX)) && BCPU(X86_64))
++#if ((BOS(DARWIN) || BOS(LINUX)) && (BCPU(X86_64) && !defined(__ILP32__)))
  #define GIGACAGE_ENABLED 1
  #else
  #define GIGACAGE_ENABLED 0

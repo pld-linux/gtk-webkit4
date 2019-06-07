@@ -16,12 +16,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.24.1
+Version:	2.25.1
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	ed70e2bf2476a58b17df3d051f42ce6a
+# Source0-md5:	379659e4c4aea94d6b21d6801a061587
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
@@ -32,6 +32,7 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	at-spi2-core-devel >= 2.6.0
 BuildRequires:	atk-devel
 BuildRequires:	bison >= 2.3
+BuildRequires:	bubblewrap >= 0.3.1
 BuildRequires:	cairo-devel >= 1.16.0
 BuildRequires:	cmake >= 3.3
 BuildRequires:	docbook-dtd412-xml
@@ -86,6 +87,7 @@ BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	woff2-devel >= 1.0.2
+BuildRequires:	xdg-dbus-proxy
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXrender-devel
@@ -207,7 +209,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f WebKit2GTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
-%attr(755,root,root) %{_bindir}/WebKitWebDriver
+%attr(755,root,root) %{_bindir}/WebDriver
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.0.so.37
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
