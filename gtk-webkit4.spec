@@ -3,7 +3,6 @@
 # - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
 #
 # Conditional build:
-%bcond_without	gtk2		# WebKitPluginProcess2 to load GTK+ 2.x based plugins
 %bcond_without	introspection	# disable introspection
 %bcond_with	cairogl		# accelerated 2D canvas using cairo-gl
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
@@ -53,7 +52,6 @@ BuildRequires:	gstreamer-gl-devel >= 1.8.3
 #BuildRequires:	gstreamer-plugins-bad-devel >= 1.8.3
 # app,audio,fft,pbutils,tag,video
 BuildRequires:	gstreamer-plugins-base-devel >= 1.8.3
-%{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
 BuildRequires:	gtk+3-devel >= 3.22.0
 BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 1.4.2
@@ -102,7 +100,6 @@ Requires:	freetype >= 1:2.9.0
 Requires:	glib2 >= 1:2.40
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
-%{?with_gtk2:Requires:	gtk+2 >= 2:2.24.10}
 Requires:	gtk+3 >= 3.12.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libsoup >= 2.48
@@ -171,7 +168,6 @@ cd build
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
-	%{!?with_gtk2:-DENABLE_PLUGIN_PROCESS_GTK2=OFF} \
 	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
 %ifarch x32
 	-DENABLE_C_LOOP=ON \
