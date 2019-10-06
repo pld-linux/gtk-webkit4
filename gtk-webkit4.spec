@@ -16,12 +16,12 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-Version:	2.25.1
+Version:	2.27.1
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	379659e4c4aea94d6b21d6801a061587
+# Source0-md5:	6ec70ea8267c3a7462285eaecd35510a
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
@@ -34,16 +34,16 @@ BuildRequires:	atk-devel
 BuildRequires:	bison >= 2.3
 BuildRequires:	bubblewrap >= 0.3.1
 BuildRequires:	cairo-devel >= 1.16.0
-BuildRequires:	cmake >= 3.3
+BuildRequires:	cmake >= 3.10
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	enchant2-devel >= 2
 BuildRequires:	flex >= 2.5.34
 BuildRequires:	fontconfig-devel >= 2.13.0
 BuildRequires:	freetype-devel >= 1:2.9.0
-BuildRequires:	gcc-c++ >= 6:6.0.0
+BuildRequires:	gcc-c++ >= 6:7.3.0
 BuildRequires:	geoclue2-devel >= 2.1.5
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.40
+BuildRequires:	glib2-devel >= 1:2.44
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
@@ -54,7 +54,7 @@ BuildRequires:	gstreamer-gl-devel >= 1.8.3
 # app,audio,fft,pbutils,tag,video
 BuildRequires:	gstreamer-plugins-base-devel >= 1.8.3
 %{?with_gtk2:BuildRequires:	gtk+2-devel >= 2:2.24.10}
-BuildRequires:	gtk+3-devel >= 3.12.0
+BuildRequires:	gtk+3-devel >= 3.22.0
 BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
@@ -65,10 +65,11 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
-BuildRequires:	libsoup-devel >= 2.48
+BuildRequires:	libsoup-devel >= 2.54
 BuildRequires:	libstdc++-devel >= 6:6.0.0
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
+BuildRequires:	libwpe-devel >= 1.3.0
 BuildRequires:	libxml2-devel >= 1:2.8.0
 BuildRequires:	libxslt-devel >= 1.1.7
 BuildRequires:	openjpeg2-devel >= 2.2.0
@@ -86,6 +87,7 @@ BuildRequires:	ruby >= 1:1.9
 BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
+BuildRequires:	wpebackend-fdo-devel >= 1.4.0
 BuildRequires:	woff2-devel >= 1.0.2
 BuildRequires:	xdg-dbus-proxy
 BuildRequires:	xorg-lib-libXcomposite-devel
@@ -209,7 +211,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f WebKit2GTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
-%attr(755,root,root) %{_bindir}/WebDriver
+%attr(755,root,root) %{_bindir}/WebKitWebDriver
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.0.so.37
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
@@ -224,7 +226,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess2
+#%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess2
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0
