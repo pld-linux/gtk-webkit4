@@ -30,30 +30,28 @@ URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
 BuildRequires:	OpenGL-GLX-devel
-BuildRequires:	at-spi2-core-devel >= 2.6.0
-BuildRequires:	atk-devel
-BuildRequires:	bison >= 2.3
+BuildRequires:	OpenGLESv2-devel
+BuildRequires:	at-spi2-core-devel >= 2.5.3
+BuildRequires:	atk-devel >= 1:2.16.0
 BuildRequires:	bubblewrap >= 0.3.1
 BuildRequires:	cairo-devel >= 1.16.0
 BuildRequires:	cmake >= 3.10
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	enchant2-devel >= 2
-BuildRequires:	flex >= 2.5.34
 BuildRequires:	fontconfig-devel >= 2.13.0
 BuildRequires:	freetype-devel >= 1:2.9.0
 BuildRequires:	gcc-c++ >= 6:7.3.0
-BuildRequires:	geoclue2-devel >= 2.1.5
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.44
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
 BuildRequires:	gstreamer-devel >= 1.14
-BuildRequires:	gstreamer-gl-devel >= 1.8.3
-# mpegts with -DUSE_GSTREAMER_MPEGTS=ON
-#BuildRequires:	gstreamer-plugins-bad-devel >= 1.8.3
+BuildRequires:	gstreamer-gl-devel >= 1.10.0
+# codecparsers,mpegts with -DUSE_GSTREAMER_MPEGTS=ON
+#BuildRequires:	gstreamer-plugins-bad-devel >= 1.10.0
 # app,audio,fft,pbutils,tag,video
-BuildRequires:	gstreamer-plugins-base-devel >= 1.8.3
+BuildRequires:	gstreamer-plugins-base-devel >= 1.10.0
 BuildRequires:	gtk+3-devel >= 3.22.0
 BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 1.4.2
@@ -66,7 +64,7 @@ BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
 BuildRequires:	libsoup-devel >= 2.54
-BuildRequires:	libstdc++-devel >= 6:6.0.0
+BuildRequires:	libstdc++-devel >= 6:7.3.0
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	libwpe-devel >= 1.3.0
@@ -87,24 +85,33 @@ BuildRequires:	ruby >= 1:1.9
 BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	tar >= 1:1.22
+%if %{with wayland}
+BuildRequires:	wayland-devel
+BuildRequires:	wayland-egl-devel
+%endif
 BuildRequires:	wpebackend-fdo-devel >= 1.4.0
 BuildRequires:	woff2-devel >= 1.0.2
 BuildRequires:	xdg-dbus-proxy
+BuildRequires:	xorg-lib-libICE-devel
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
+BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	xz
 BuildRequires:	zlib-devel
+Requires:	at-spi2-core-libs >= 2.5.3
+Requires:	atk >= 1:2.16.0
 Requires:	cairo >= 1.16.0
 Requires:	fontconfig-libs >= 2.13.0
 Requires:	freetype >= 1:2.9.0
-Requires:	glib2 >= 1:2.40
+Requires:	glib2 >= 1:2.44
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
-Requires:	gtk+3 >= 3.12.0
+Requires:	gtk+3 >= 3.22.0
 Requires:	harfbuzz >= 1.4.2
-Requires:	libsoup >= 2.48
+Requires:	libgcrypt >= 1.7.0
+Requires:	libsoup >= 2.54
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
@@ -130,10 +137,10 @@ Summary:	Development files for WebKit for GTK+ 3
 Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK+ 3
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.40
-Requires:	gtk+3-devel >= 3.12.0
-Requires:	libsoup-devel >= 2.48
-Requires:	libstdc++-devel >= 6:4.9
+Requires:	glib2-devel >= 1:2.44
+Requires:	gtk+3-devel >= 3.22.0
+Requires:	libsoup-devel >= 2.54
+Requires:	libstdc++-devel >= 6:7.3.0
 
 %description devel
 Development files for WebKit for GTK+ 3.
