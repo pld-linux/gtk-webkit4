@@ -16,12 +16,12 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.26.x is stable, 2.27.x devel (see DEVEL-2.27 branch)
-Version:	2.26.4
+Version:	2.28.0
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	60f881729f3b71244b7f6e58790073e0
+# Source0-md5:	0bf11df8117ea64f6b8de59d278a2c78
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
@@ -87,6 +87,7 @@ BuildRequires:	tar >= 1:1.22
 %if %{with wayland}
 BuildRequires:	wayland-devel
 BuildRequires:	wayland-egl-devel
+BuildRequires:	wayland-protocols >= 1.12
 %endif
 BuildRequires:	wpebackend-fdo-devel >= 1.4.0
 BuildRequires:	woff2-devel >= 1.0.2
