@@ -1,6 +1,7 @@
 # TODO: review configure options:
 # - FTL_JIT on !x86_64?
 # - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
+# - GAMEPAD? (BR: libmanette-devel >= 0.2.4)
 #
 # Conditional build:
 %bcond_without	introspection	# disable introspection
@@ -15,13 +16,13 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.28.x is stable, 2.29.x devel
-Version:	2.28.4
+# NOTE: 2.30.x is stable, 2.31.x devel
+Version:	2.30.0
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	10e0cce27208dfbd4cf63dd68a9a47d7
+# Source0-md5:	71428fefd33f40583465649baf05ceb5
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
@@ -57,7 +58,7 @@ BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
 BuildRequires:	hyphen-devel
 BuildRequires:	libgcrypt-devel >= 1.7.0
-BuildRequires:	libicu-devel >= 59
+BuildRequires:	libicu-devel >= 60.2
 BuildRequires:	libjpeg-devel
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
@@ -74,9 +75,9 @@ BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
 %if %{with cairogl}
-BuildRequires:	pkgconfig(cairo-egl)
-BuildRequires:	pkgconfig(cairo-gl)
-BuildRequires:	pkgconfig(cairo-glx)
+BuildRequires:	pkgconfig(cairo-egl) >= 1.10.2
+BuildRequires:	pkgconfig(cairo-gl) >= 1.10.2
+BuildRequires:	pkgconfig(cairo-glx) >= 1.10.2
 %endif
 BuildRequires:	python >= 1:2.7.0
 BuildRequires:	rpmbuild(macros) >= 1.699
@@ -177,15 +178,16 @@ cd build
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
+	-DENABLE_NETSCAPE_PLUGIN_API=ON \
+	-DENABLE_VIDEO=ON \
 	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
+	-DENABLE_WEB_AUDIO=ON \
+	-DENABLE_WEBGL=ON \
 %ifarch x32
 	-DENABLE_C_LOOP=ON \
 	-DENABLE_JIT=OFF \
 	-DENABLE_SAMPLING_PROFILER=OFF \
 %endif
-	-DENABLE_VIDEO=ON \
-	-DENABLE_WEB_AUDIO=ON \
-	-DENABLE_WEBGL=ON \
 %ifarch %{ix86} %{x8664} x32
 	-DHAVE_SSE2_EXTENSIONS=ON \
 %endif
@@ -230,8 +232,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/webkit2gtk-4.0
 %endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
-#%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess2
+#%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0
