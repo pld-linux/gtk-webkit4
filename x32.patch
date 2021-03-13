@@ -7,21 +7,19 @@ Description: Use WTF_CPU_UNKNOWN when building for X32
 Forwarded: no
 Index: webkitgtk/Source/WTF/wtf/Platform.h
 ===================================================================
---- webkitgtk-2.28.0/Source/WTF/wtf/PlatformCPU.h.orig	2020-02-04 11:24:07.000000000 +0100
-+++ webkitgtk-2.28.0/Source/WTF/wtf/PlatformCPU.h	2020-04-12 22:28:20.564373047 +0200
-@@ -107,10 +107,12 @@
+--- webkitgtk-2.30.5/Source/WTF/wtf/PlatformCPU.h.orig	2020-08-12 11:17:54.000000000 +0200
++++ webkitgtk-2.30.5/Source/WTF/wtf/PlatformCPU.h	2021-03-13 19:14:43.872248582 +0100
+@@ -105,8 +105,8 @@
+ #endif
+ 
  /* CPU(X86_64) - AMD64 / Intel64 / x86_64 64-bit */
- #if   defined(__x86_64__) \
-     || defined(_M_X64)
-+#if !defined(__ILP32__)
+-#if   defined(__x86_64__) \
+-    || defined(_M_X64)
++#if ( defined(__x86_64__) \
++    || defined(_M_X64) ) && !defined(__ILP32__)
  #define WTF_CPU_X86_64 1
  #define WTF_CPU_X86_SSE2 1
  #define WTF_CPU_KNOWN 1
- #endif
-+#endif
- 
- /* CPU(ARM64) - Apple */
- #if (defined(__arm64__) && defined(__APPLE__)) || defined(__aarch64__)
 Index: webkitgtk/CMakeLists.txt
 ===================================================================
 --- webkitgtk.orig/CMakeLists.txt
