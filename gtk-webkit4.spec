@@ -4,7 +4,7 @@
 # - GAMEPAD? (BR: libmanette-devel >= 0.2.4)
 #
 # Conditional build:
-%bcond_without	introspection	# disable introspection
+%bcond_without	introspection	# GObject introspection
 %bcond_with	cairogl		# accelerated 2D canvas using cairo-gl
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
 #
@@ -17,15 +17,16 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.30.x is stable, 2.31.x devel
-Version:	2.30.0
+Version:	2.30.5
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	71428fefd33f40583465649baf05ceb5
+# Source0-md5:	c8291af0c5102fff1f73e67f0bff6c87
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
+Patch3:		%{name}-wpe.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -80,6 +81,7 @@ BuildRequires:	pkgconfig(cairo-gl) >= 1.10.2
 BuildRequires:	pkgconfig(cairo-glx) >= 1.10.2
 %endif
 BuildRequires:	python >= 1:2.7.0
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.699
 BuildRequires:	ruby >= 1:1.9
 BuildRequires:	ruby-modules >= 1:1.9
@@ -167,6 +169,7 @@ Dokumentacja API WebKita.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 install -d build
@@ -230,7 +233,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/webkit2gtk-4.0
 %endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
-#%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
+%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0
