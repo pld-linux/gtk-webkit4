@@ -2,6 +2,7 @@
 # - FTL_JIT on !x86_64?
 # - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
 # - GAMEPAD? (BR: libmanette-devel >= 0.2.4)
+# - gtk4/libsoup3 variant as gtk-webkit5? (-DUSE_GTK4=ON/-DUSE_SOUP2=OFF)
 #
 # Conditional build:
 %bcond_without	introspection	# GObject introspection
@@ -16,17 +17,17 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.30.x is stable, 2.31.x devel
-Version:	2.30.5
-Release:	2
+# NOTE: 2.32.x is stable, 2.33.x devel
+Version:	2.32.0
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	c8291af0c5102fff1f73e67f0bff6c87
+# Source0-md5:	a24a9441ad01617be9ac95097cd31e08
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
-Patch3:		%{name}-wpe.patch
+Patch3:		%{name}-npapi-remnants.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -43,7 +44,7 @@ BuildRequires:	fontconfig-devel >= 2.13.0
 BuildRequires:	freetype-devel >= 1:2.9.0
 BuildRequires:	gcc-c++ >= 6:7.3.0
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.44
+BuildRequires:	glib2-devel >= 1:2.67.1
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
@@ -86,6 +87,7 @@ BuildRequires:	rpmbuild(macros) >= 1.699
 BuildRequires:	ruby >= 1:1.9
 BuildRequires:	ruby-modules >= 1:1.9
 BuildRequires:	sqlite3-devel >= 3
+BuildRequires:	systemd-devel
 BuildRequires:	tar >= 1:1.22
 %if %{with wayland}
 BuildRequires:	wayland-devel
@@ -108,7 +110,7 @@ Requires:	atk >= 1:2.16.0
 Requires:	cairo >= 1.16.0
 Requires:	fontconfig-libs >= 2.13.0
 Requires:	freetype >= 1:2.9.0
-Requires:	glib2 >= 1:2.44
+Requires:	glib2 >= 1:2.67.1
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk+3 >= 3.22.0
@@ -140,7 +142,7 @@ Summary:	Development files for WebKit for GTK+ 3
 Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK+ 3
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.44
+Requires:	glib2-devel >= 1:2.67.1
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup-devel >= 2.54
 Requires:	libstdc++-devel >= 6:7.3.0
@@ -179,7 +181,6 @@ cd build
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
-	-DENABLE_NETSCAPE_PLUGIN_API=ON \
 	-DENABLE_VIDEO=ON \
 	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
 	-DENABLE_WEB_AUDIO=ON \
@@ -233,7 +234,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/webkit2gtk-4.0
 %endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitPluginProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0
