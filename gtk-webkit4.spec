@@ -18,12 +18,12 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.32.x is stable, 2.33.x devel
-Version:	2.32.0
+Version:	2.32.3
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	a24a9441ad01617be9ac95097cd31e08
+# Source0-md5:	f31b802de421865ea9f1391ec8190519
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
@@ -62,6 +62,7 @@ BuildRequires:	hyphen-devel
 BuildRequires:	libgcrypt-devel >= 1.7.0
 BuildRequires:	libicu-devel >= 60.2
 BuildRequires:	libjpeg-devel
+BuildRequires:	libmanette-devel
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
