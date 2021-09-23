@@ -1,8 +1,10 @@
 # TODO: review configure options:
 # - FTL_JIT on !x86_64?
 # - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
-# - GAMEPAD? (BR: libmanette-devel >= 0.2.4)
-# - gtk4/libsoup3 variant as gtk-webkit5? (-DUSE_GTK4=ON/-DUSE_SOUP2=OFF)
+# - AVIF? (BR: libavif-devel >= 0.9.0)
+# - THUNDER? (BR: Thunder + ThunderClientLibraries)
+# - libsoup3 for HTTP/2 (drop USE_SOUP2=ON)? (BR: libsoup3-devel >= 2.99.9; changes abi tag from -4.0 to -4.1; doc tag remains -4.0)
+# - gtk4 variant as gtk-webkit5 (-DUSE_GTK4=ON), (needs libsoup3, BR: gtk4-devel >= 3.98.5; changes abi and doc tags to -5.0)
 #
 # Conditional build:
 %bcond_without	introspection	# GObject introspection
@@ -17,13 +19,13 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.32.x is stable, 2.33.x devel
-Version:	2.32.3
+# NOTE: 2.34.x is stable, 2.35.x devel
+Version:	2.34.0
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	f31b802de421865ea9f1391ec8190519
+# Source0-md5:	32334fddc48e3428044bbd9215d0636f
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
@@ -37,7 +39,7 @@ BuildRequires:	at-spi2-core-devel >= 2.5.3
 BuildRequires:	atk-devel >= 1:2.16.0
 BuildRequires:	bubblewrap >= 0.3.1
 BuildRequires:	cairo-devel >= 1.16.0
-BuildRequires:	cmake >= 3.10
+BuildRequires:	cmake >= 3.12
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	enchant2-devel >= 2
 BuildRequires:	fontconfig-devel >= 2.13.0
@@ -60,9 +62,9 @@ BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
 BuildRequires:	hyphen-devel
 BuildRequires:	libgcrypt-devel >= 1.7.0
-BuildRequires:	libicu-devel >= 60.2
+BuildRequires:	libicu-devel >= 61.2
 BuildRequires:	libjpeg-devel
-BuildRequires:	libmanette-devel
+BuildRequires:	libmanette-devel >= 0.2.4
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsecret-devel
@@ -95,7 +97,7 @@ BuildRequires:	wayland-devel
 BuildRequires:	wayland-egl-devel
 BuildRequires:	wayland-protocols >= 1.12
 %endif
-BuildRequires:	wpebackend-fdo-devel >= 1.4.0
+BuildRequires:	wpebackend-fdo-devel >= 1.6.0
 BuildRequires:	woff2-devel >= 1.0.2
 BuildRequires:	xdg-dbus-proxy
 BuildRequires:	xorg-lib-libICE-devel
@@ -123,6 +125,7 @@ Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	woff2 >= 1.0.2
+Requires:	wpebackend-fdo >= 1.6.0
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
 # Source/JavaScriptCore/CMakeLists.txt /WTF_CPU_
 ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa mips ppc ppc64 ppc64le s390 s390x sh4
@@ -195,7 +198,8 @@ cd build
 	-DHAVE_SSE2_EXTENSIONS=ON \
 %endif
 	-DPORT=GTK \
-	-DSHOULD_INSTALL_JS_SHELL=ON
+	-DSHOULD_INSTALL_JS_SHELL=ON \
+	-DUSE_SOUP2=ON
 
 %{__make}
 
