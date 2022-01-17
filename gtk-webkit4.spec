@@ -46,6 +46,7 @@ BuildRequires:	fontconfig-devel >= 2.13.0
 BuildRequires:	freetype-devel >= 1:2.9.0
 BuildRequires:	gcc-c++ >= 6:7.3.0
 BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel >= 1:2.67.1
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
@@ -67,6 +68,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libmanette-devel >= 0.2.4
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
+BuildRequires:	libseccomp-devel
 BuildRequires:	libsecret-devel
 BuildRequires:	libsoup-devel >= 2.54
 BuildRequires:	libstdc++-devel >= 6:7.3.0
