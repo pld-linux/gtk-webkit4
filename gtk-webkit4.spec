@@ -2,13 +2,13 @@
 # - FTL_JIT on !x86_64?
 # - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
 # - AVIF? (BR: libavif-devel >= 0.9.0)
+# - JPEGXL? (BR: libjxl-devel)
 # - THUNDER? (BR: Thunder + ThunderClientLibraries)
 # - libsoup3 for HTTP/2 (drop USE_SOUP2=ON)? (BR: libsoup3-devel >= 2.99.9; changes abi tag from -4.0 to -4.1; doc tag remains -4.0)
 # - gtk4 variant as gtk-webkit5 (-DUSE_GTK4=ON), (needs libsoup3, BR: gtk4-devel >= 3.98.5; changes abi and doc tags to -5.0)
 #
 # Conditional build:
 %bcond_without	introspection	# GObject introspection
-%bcond_with	cairogl		# accelerated 2D canvas using cairo-gl
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
@@ -20,16 +20,15 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.34.x is stable, 2.35.x devel
-Version:	2.34.3
+Version:	2.36.0
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	de30c41fb57b2b024417669c22914752
+# Source0-md5:	1e3fe866ab6e41e7ec3deb80bd5b3a85
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
-Patch3:		%{name}-npapi-remnants.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -71,7 +70,8 @@ BuildRequires:	libpng-devel
 BuildRequires:	libseccomp-devel
 BuildRequires:	libsecret-devel
 BuildRequires:	libsoup-devel >= 2.54
-BuildRequires:	libstdc++-devel >= 6:7.3.0
+# -std=c++2a
+BuildRequires:	libstdc++-devel >= 6:8
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	libwpe-devel >= 1.3.0
@@ -81,11 +81,6 @@ BuildRequires:	openjpeg2-devel >= 2.2.0
 BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
-%if %{with cairogl}
-BuildRequires:	pkgconfig(cairo-egl) >= 1.10.2
-BuildRequires:	pkgconfig(cairo-gl) >= 1.10.2
-BuildRequires:	pkgconfig(cairo-glx) >= 1.10.2
-%endif
 BuildRequires:	python >= 1:2.7.0
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.699
@@ -151,7 +146,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.67.1
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup-devel >= 2.54
-Requires:	libstdc++-devel >= 6:7.3.0
+Requires:	libstdc++-devel >= 6:8
 
 %description devel
 Development files for WebKit for GTK+ 3.
@@ -177,13 +172,11 @@ Dokumentacja API WebKita.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 install -d build
 cd build
 %cmake .. \
-	%{?with_cairogl:-DENABLE_ACCELERATED_2D_CANVAS=ON} \
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
