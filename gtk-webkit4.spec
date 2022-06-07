@@ -63,6 +63,7 @@ BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
 BuildRequires:	hyphen-devel
+BuildRequires:	lcms2-devel
 BuildRequires:	libgcrypt-devel >= 1.7.0
 BuildRequires:	libicu-devel >= 61.2
 BuildRequires:	libjpeg-devel
