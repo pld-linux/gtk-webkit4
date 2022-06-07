@@ -327,9 +327,9 @@ install -d $RPM_BUILD_ROOT%{_gtkdocdir}
 %{__mv} $RPM_BUILD_ROOT%{_datadir}/gtk-doc/html/* $RPM_BUILD_ROOT%{_gtkdocdir}
 %endif
 
-%find_lang WebKit2GTK-4.0
-%find_lang WebKit2GTK-4.1
-%find_lang WebKit2GTK-5.0
+%{?with_gtk3:%{?with_libsoup2:%find_lang WebKit2GTK-4.0}}
+%{?with_gtk3:%{?with_libsoup3:%find_lang WebKit2GTK-4.1}}
+%{?with_gtk4:%find_lang WebKit2GTK-5.0}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
