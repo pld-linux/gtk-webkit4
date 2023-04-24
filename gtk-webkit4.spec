@@ -1,8 +1,8 @@
 # TODO: review configure options:
 # - FTL_JIT on !x86_64?
-# - WEB_RTC+MEDIA_STREAM (BR: openwebrtc)
-# - AVIF? (BR: libavif-devel >= 0.9.0)
-# - JPEGXL? (BR: libjxl-devel)
+# - WEB_RTC+MEDIA_STREAM (experimental; BR: openwebrtc)
+# - AVIF? (experimental; BR: libavif-devel >= 0.9.0)
+# - JPEGXL? (experimental; BR: libjxl-devel)
 # - THUNDER? (BR: Thunder + ThunderClientLibraries)
 #
 # Conditional build:
@@ -12,6 +12,7 @@
 %bcond_without	gtk3		# webkit-4.x (gtk3 based) variants
 %bcond_without	gtk4		# webkit-5.0 (gtk4/libsoup3 based) variant
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
+%bcond_with	lowmem		# try to reduce build memory usage (disable unified build, adjust gcc gc)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
 # memory constraints during linking
@@ -22,14 +23,15 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.34.x is stable, 2.35.x devel
-Version:	2.36.1
-Release:	3
+Version:	2.38.5
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	e6100df7f82d95a4e65176b10f5ab011
+# Source0-md5:	de05d314a3ecb5fb3835e4d84f8f466d
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
+Patch2:		%{name}-gir.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -39,7 +41,7 @@ BuildRequires:	at-spi2-core-devel >= 2.5.3
 BuildRequires:	atk-devel >= 1:2.16.0
 BuildRequires:	bubblewrap >= 0.3.1
 BuildRequires:	cairo-devel >= 1.16.0
-BuildRequires:	cmake >= 3.12
+BuildRequires:	cmake >= 3.20
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	enchant2-devel >= 2
 BuildRequires:	fontconfig-devel >= 2.13.0
@@ -47,6 +49,7 @@ BuildRequires:	freetype-devel >= 1:2.9.0
 BuildRequires:	gcc-c++ >= 6:7.3.0
 BuildRequires:	gettext-devel
 BuildRequires:	gettext-tools
+BuildRequires:	gi-docgen
 BuildRequires:	glib2-devel >= 1:2.67.1
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
@@ -63,7 +66,7 @@ BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
 BuildRequires:	hyphen-devel
-BuildRequires:	lcms2-devel
+BuildRequires:	lcms2-devel >= 2
 BuildRequires:	libgcrypt-devel >= 1.7.0
 BuildRequires:	libicu-devel >= 61.2
 BuildRequires:	libjpeg-devel
@@ -75,7 +78,7 @@ BuildRequires:	libsecret-devel
 %{?with_libsoup2:BuildRequires:	libsoup-devel >= 2.54}
 %{?with_libsoup3:BuildRequires:	libsoup3-devel >= 3.0}
 # -std=c++2a
-BuildRequires:	libstdc++-devel >= 6:8
+BuildRequires:	libstdc++-devel >= 6:8.3
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	libwpe-devel >= 1.3.0
@@ -121,6 +124,7 @@ Requires:	gtk+3 >= 3.22.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
 Requires:	libsoup >= 2.54
+Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
@@ -150,7 +154,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.67.1
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup-devel >= 2.54
-Requires:	libstdc++-devel >= 6:8
+Requires:	libstdc++-devel >= 6:8.3
 
 %description devel
 Development files for WebKit for GTK+ 3.
@@ -187,6 +191,7 @@ Requires:	gtk+3 >= 3.22.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
 Requires:	libsoup3 >= 3.0
+Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
@@ -210,13 +215,26 @@ Requires:	gtk-webkit4.1 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.67.1
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:8
+Requires:	libstdc++-devel >= 6:8.3
 
 %description -n gtk-webkit4.1-devel
 Development files for WebKit for GTK+ 3 with HTTP/2 support.
 
 %description -n gtk-webkit4.1-devel -l pl.UTF-8
 Pliki programistyczne komponentu WebKit dla GTK+ 3 z obsługą HTTP/2.
+
+%package -n gtk-webkit4.1-apidocs
+Summary:	API documentation for WebKit GTK+ 3 port with HTTP/2 support
+Summary(pl.UTF-8):	Dokumentacja API portu WebKitu do GTK+ 3 z obsługą HTTP/2
+Group:		Documentation
+Requires:	gtk-doc-common
+BuildArch:	noarch
+
+%description -n gtk-webkit4.1-apidocs
+API documentation for WebKit GTK+ 3 port with HTTP/2 support.
+
+%description -n gtk-webkit4.1-apidocs -l pl.UTF-8
+Dokumentacja API portu WebKitu do GTK+ 3 z obsługą HTTP/2.
 
 %package -n gtk-webkit5
 Summary:	Port of WebKit embeddable web component to GTK 4
@@ -234,6 +252,7 @@ Requires:	gtk4 >= 4.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
 Requires:	libsoup3 >= 3.0
+Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
@@ -255,7 +274,7 @@ Requires:	gtk-webkit5 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.67.1
 Requires:	gtk4-devel >= 4.0
 Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:8
+Requires:	libstdc++-devel >= 6:8.3
 
 %description -n gtk-webkit5-devel
 Development files for WebKit for GTK 4.
@@ -280,19 +299,19 @@ Dokumentacja API portu WebKitu do GTK 4.
 %setup -q -n webkitgtk-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
+%if %{with lowmem}
+CXXFLAGS="%{rpmcxxflags} --param ggc-min-expand=30 --param ggc-min-heapsize=768"
+%endif
 for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?with_gtk4:gtk4} ; do
 install -d build-${kind}
-cd build-${kind}
-# gtk4 variant is missing some files in dist:
-# Source/WebKit/UIProcess/API/gtk/docs/webkit2gtk-5.0-sections.txt
-# Source/WebKit/UIProcess/API/gtk/docs/webkit2gtk-5.0.types
-# don't know how to generate them, disable GTKDOC for now
-%cmake .. \
+%cmake -B build-${kind} \
 	-DENABLE_GEOLOCATION=ON \
-	$([ "$kind" != "gtk4" ] && echo -DENABLE_GTKDOC=ON) \
+	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
+	%{?with_lowmem:-DENABLE_UNIFIED_BUILDS=OFF} \
 	-DENABLE_VIDEO=ON \
 	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
 	-DENABLE_WEB_AUDIO=ON \
@@ -310,8 +329,7 @@ cd build-${kind}
 	$([ "$kind" = "gtk4" ] && echo -DUSE_GTK4=ON) \
 	$([ "$kind" = "soup2" ] && echo -DUSE_SOUP2=ON)
 
-%{__make}
-cd ..
+%{__make} -C build-${kind}
 done
 
 %install
@@ -360,6 +378,7 @@ rm -rf $RPM_BUILD_ROOT
 %if "%{_libexecdir}" != "%{_libdir}"
 %dir %{_libexecdir}/webkit2gtk-4.0
 %endif
+%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/MiniBrowser
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
@@ -380,14 +399,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/javascriptcoregtk-4.0.pc
 %{_pkgconfigdir}/webkit2gtk-4.0.pc
 %{_pkgconfigdir}/webkit2gtk-web-extension-4.0.pc
-%endif
 
-%if %{with gtk3}
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/jsc-glib-4.0
+%{_gtkdocdir}/javascriptcoregtk-4.0
 %{_gtkdocdir}/webkit2gtk-4.0
-%{_gtkdocdir}/webkitdomgtk-4.0
+%{_gtkdocdir}/webkit2gtk-web-extension-4.0
 %endif
 
 %if %{with gtk3} && %{with libsoup3}
@@ -406,6 +423,7 @@ rm -rf $RPM_BUILD_ROOT
 %if "%{_libexecdir}" != "%{_libdir}"
 %dir %{_libexecdir}/webkit2gtk-4.1
 %endif
+%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/MiniBrowser
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/jsc
@@ -426,6 +444,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/javascriptcoregtk-4.1.pc
 %{_pkgconfigdir}/webkit2gtk-4.1.pc
 %{_pkgconfigdir}/webkit2gtk-web-extension-4.1.pc
+
+%files -n gtk-webkit4.1-apidocs
+%defattr(644,root,root,755)
+%{_gtkdocdir}/javascriptcoregtk-4.1
+%{_gtkdocdir}/webkit2gtk-4.1
+%{_gtkdocdir}/webkit2gtk-web-extension-4.1
 %endif
 
 %if %{with gtk4}
@@ -444,6 +468,7 @@ rm -rf $RPM_BUILD_ROOT
 %if "%{_libexecdir}" != "%{_libdir}"
 %dir %{_libexecdir}/webkit2gtk-5.0
 %endif
+%attr(755,root,root) %{_libexecdir}/webkit2gtk-5.0/MiniBrowser
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-5.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-5.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-5.0/jsc
@@ -465,12 +490,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/webkit2gtk-5.0.pc
 %{_pkgconfigdir}/webkit2gtk-web-extension-5.0.pc
 
-# disabled for now, see note on cmake
-%if 0
 %files -n gtk-webkit5-apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/jsc-glib-5.0
+%{_gtkdocdir}/javascriptcoregtk-5.0
 %{_gtkdocdir}/webkit2gtk-5.0
-%{_gtkdocdir}/webkitdomgtk-5.0
-%endif
+%{_gtkdocdir}/webkit2gtk-web-extension-5.0
 %endif
