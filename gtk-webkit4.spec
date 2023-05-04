@@ -12,7 +12,8 @@
 %bcond_without	gtk3		# webkit-4.x (gtk3 based) variants
 %bcond_without	gtk4		# webkit-5.0 (gtk4/libsoup3 based) variant
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
-%bcond_with	lowmem		# try to reduce build memory usage (disable unified build, adjust gcc gc)
+%bcond_with	lowmem		# try to reduce build memory usage by adjusting gcc gc
+%bcond_with	lowmem2		# try to reduce build memory usage by disabling unified build (long)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
 # memory constraints during linking
@@ -303,7 +304,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 
 %build
 %if %{with lowmem}
-CXXFLAGS="%{rpmcxxflags} --param ggc-min-expand=30 --param ggc-min-heapsize=768"
+CXXFLAGS="%{rpmcxxflags} --param ggc-min-expand=20 --param ggc-min-heapsize=65536"
 %endif
 for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?with_gtk4:gtk4} ; do
 install -d build-${kind}
@@ -311,7 +312,7 @@ install -d build-${kind}
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
-	%{?with_lowmem:-DENABLE_UNIFIED_BUILDS=OFF} \
+	%{?with_lowmem2:-DENABLE_UNIFIED_BUILDS=OFF} \
 	-DENABLE_VIDEO=ON \
 	%{!?with_wayland:-DENABLE_WAYLAND_TARGET=OFF} \
 	-DENABLE_WEB_AUDIO=ON \
