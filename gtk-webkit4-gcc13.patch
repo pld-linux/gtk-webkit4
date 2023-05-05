@@ -1,0 +1,27 @@
+--- webkitgtk-2.38.6/Source/ThirdParty/ANGLE/include/GLSLANG/ShaderVars.h.orig	2022-08-19 13:14:22.903425000 +0200
++++ webkitgtk-2.38.6/Source/ThirdParty/ANGLE/include/GLSLANG/ShaderVars.h	2023-05-05 06:11:59.781732404 +0200
+@@ -12,6 +12,7 @@
+ 
+ #include <algorithm>
+ #include <array>
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+--- webkitgtk-2.38.6/Source/WebCore/platform/graphics/SourceBrush.cpp.orig	2022-09-20 10:13:48.250555000 +0200
++++ webkitgtk-2.38.6/Source/WebCore/platform/graphics/SourceBrush.cpp	2023-05-05 06:14:14.776532489 +0200
+@@ -65,12 +65,12 @@ Pattern* SourceBrush::pattern() const
+ 
+ void SourceBrush::setGradient(Ref<Gradient>&& gradient, const AffineTransform& spaceTransform)
+ {
+-    m_brush = { Brush::LogicalGradient { WTFMove(gradient), spaceTransform } };
++    m_brush = Brush { Brush::LogicalGradient { WTFMove(gradient), spaceTransform } };
+ }
+ 
+ void SourceBrush::setPattern(Ref<Pattern>&& pattern)
+ {
+-    m_brush = { WTFMove(pattern) };
++    m_brush = Brush { WTFMove(pattern) };
+ }
+ 
+ WTF::TextStream& operator<<(TextStream& ts, const SourceBrush& brush)

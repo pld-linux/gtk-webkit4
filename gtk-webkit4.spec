@@ -25,7 +25,7 @@ Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.38.x is stable, 2.39.x devel
 Version:	2.38.6
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
@@ -33,6 +33,8 @@ Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		%{name}-gir.patch
+Patch3:		%{name}-driver-version-suffix.patch
+Patch4:		%{name}-gcc13.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -301,6 +303,8 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 %if %{with lowmem}
@@ -366,7 +370,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f WebKit2GTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
-%attr(755,root,root) %{_bindir}/WebKitWebDriver
+%attr(755,root,root) %{_bindir}/WebKitWebDriver-4.0
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.0.so.37
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
@@ -412,6 +416,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n gtk-webkit4.1 -f WebKit2GTK-4.1.lang
 %defattr(644,root,root,755)
 %doc NEWS
+%attr(755,root,root) %{_bindir}/WebKitWebDriver-4.1
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-4.1.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.1.so.0
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.1.so.*.*.*
@@ -457,6 +462,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n gtk-webkit5 -f WebKit2GTK-5.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
+%attr(755,root,root) %{_bindir}/WebKitWebDriver-5.0
 %attr(755,root,root) %{_libdir}/libwebkit2gtk-5.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-5.0.so.0
 %attr(755,root,root) %{_libdir}/libjavascriptcoregtk-5.0.so.*.*.*

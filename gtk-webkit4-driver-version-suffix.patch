@@ -1,0 +1,8 @@
+--- webkitgtk-2.38.6/Source/WebDriver/PlatformGTK.cmake.orig	2022-08-19 13:14:27.800098000 +0200
++++ webkitgtk-2.38.6/Source/WebDriver/PlatformGTK.cmake	2023-05-05 06:13:51.566790434 +0200
+@@ -1,4 +1,4 @@
+-set(WebDriver_OUTPUT_NAME WebKitWebDriver)
++set(WebDriver_OUTPUT_NAME WebKitWebDriver-${WEBKITGTK_API_VERSION})
+ 
+ add_definitions(-DLIBEXECDIR="${CMAKE_INSTALL_FULL_LIBEXECDIR}")
+ 
