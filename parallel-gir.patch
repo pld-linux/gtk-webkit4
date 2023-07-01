@@ -1,0 +1,72 @@
+From bbe8d64377e2ff81cfe146d961d3ce3d7005d666 Mon Sep 17 00:00:00 2001
+From: Jan Palus <jpalus@fastmail.com>
+Date: Sat, 1 Jul 2023 14:36:09 +0200
+Subject: [PATCH] Generate GIR once to fix intermittent parallel build failures
+
+typelib, doc-check and doc targets add file dependency on generated GIR
+file. As per CMake documentation that pulls commands to generate GIR
+file in every of those targets:
+
+https://cmake.org/cmake/help/latest/command/add_custom_command.html
+
+> If any dependency is an OUTPUT of another custom command in the same
+> directory (CMakeLists.txt file), CMake automatically brings the other
+> custom command into the target in which this command is built.
+
+Meaning there will be 4 different commands in total trying to create
+same file independently without any ordering enforced between them. This
+causes intermittent failures depending on timing in which those commands
+execute when invoking parallel build.
+
+To ensure that GIR is created only once and that proper ordering is in
+place replace file dependency with dependency on target creating GIR
+file.
+
+Signed-off-by: Jan Palus <jpalus@fastmail.com>
+---
+ Source/cmake/FindGI.cmake       | 2 +-
+ Source/cmake/FindGIDocgen.cmake | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Source/cmake/FindGI.cmake b/Source/cmake/FindGI.cmake
+index fdc56b21b148..6b636af69a28 100644
+--- a/Source/cmake/FindGI.cmake
++++ b/Source/cmake/FindGI.cmake
+@@ -376,7 +376,7 @@ function(GI_INTROSPECT namespace nsversion header)
+     add_custom_command(
+         OUTPUT "${typ_path}"
+         COMMENT "Generating ${gir_name}.typelib"
+-        DEPENDS "${gir_path}"
++        DEPENDS "gir-${namespace}"
+         VERBATIM
+         COMMAND "${GI_COMPILER_EXE}"
+             "--includedir=${CMAKE_BINARY_DIR}"
+diff --git a/Source/cmake/FindGIDocgen.cmake b/Source/cmake/FindGIDocgen.cmake
+index 88c90633e63f..ef560db7a2f0 100644
+--- a/Source/cmake/FindGIDocgen.cmake
++++ b/Source/cmake/FindGIDocgen.cmake
+@@ -180,7 +180,7 @@ function(GI_DOCGEN namespace toml)
+     endif ()
+     set(outdir "${CMAKE_BINARY_DIR}/Documentation/${package}")
+ 
+-    set(docdeps "${toml_path};${gir_path}")
++    set(docdeps "${toml_path};gir-${namespace}")
+     foreach (item IN LISTS opt_CONTENT_TEMPLATES)
+         get_filename_component(filename "${item}" NAME)
+         configure_file("${item}.in" "${contentdir}/${filename}" @ONLY)
+@@ -239,10 +239,11 @@ function(GI_DOCGEN namespace toml)
+     add_custom_target("doc-check-${namespace}"
+         COMMENT "Checking documentation: ${namespace}"
+         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+-        DEPENDS "${toml_path}" "${gir_path}"
++        DEPENDS "${toml_path}"
+         VERBATIM
+         COMMAND "${GIDocgen_EXE}" check ${common_flags} "${gir_path}"
+     )
++    add_dependencies("doc-check-${namespace}" "gir-${namespace}")
+ 
+     if (NOT TARGET doc-check-all)
+         add_custom_target(doc-check-all COMMENT "Check all documentation targets")
+-- 
+2.41.0
+

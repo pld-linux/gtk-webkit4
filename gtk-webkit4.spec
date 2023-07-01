@@ -32,7 +32,7 @@ Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
 # Source0-md5:	a50290fdc80842b1ae8be1e1147b5679
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
-Patch2:		%{name}-gir.patch
+Patch2:		parallel-gir.patch
 Patch3:		%{name}-driver-version-suffix.patch
 Patch4:		%{name}-gcc13.patch
 URL:		https://webkitgtk.org/
