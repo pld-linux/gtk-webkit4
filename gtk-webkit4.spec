@@ -25,7 +25,7 @@ Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.38.x is stable, 2.39.x devel
 Version:	2.38.6
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
