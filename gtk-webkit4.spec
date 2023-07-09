@@ -61,6 +61,7 @@ BuildRequires:	gstreamer-gl-devel >= 1.10.0
 #BuildRequires:	gstreamer-plugins-bad-devel >= 1.10.0
 # app,audio,fft,pbutils,tag,video
 BuildRequires:	gstreamer-plugins-base-devel >= 1.10.0
+BuildRequires:	gstreamer-transcoder-devel >= 1.20
 %{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.22.0}
 %{?with_gtk4:BuildRequires:	gtk4-devel >= 4.0}
 BuildRequires:	gtk-doc >= 1.10
