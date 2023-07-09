@@ -32,6 +32,15 @@ diff --git a/Source/cmake/FindGI.cmake b/Source/cmake/FindGI.cmake
 index fdc56b21b148..6b636af69a28 100644
 --- a/Source/cmake/FindGI.cmake
 +++ b/Source/cmake/FindGI.cmake
+@@ -265,7 +265,7 @@ function(GI_INTROSPECT namespace nsversi
+             get_property(dep_gir_lib TARGET "gir-${dep}" PROPERTY GI_GIR_LIBRARY)
+             if (dep_gir_path)
+                 list(APPEND scanner_flags "--include-uninstalled=${dep_gir_path}")
+-                list(APPEND gir_deps "${dep_gir_path}")
++                list(APPEND gir_deps "gir-${dep}")
+             else ()
+                 message(AUTHOR_WARNING
+                     "Target '${dep}' listed as a dependency but it has not "
 @@ -376,7 +376,7 @@ function(GI_INTROSPECT namespace nsversion header)
      add_custom_command(
          OUTPUT "${typ_path}"
