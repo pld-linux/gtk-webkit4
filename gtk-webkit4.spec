@@ -1,7 +1,6 @@
 # TODO: review configure options:
 # - FTL_JIT on !x86_64?
 # - WEB_RTC+MEDIA_STREAM (experimental; BR: openwebrtc)
-# - JPEGXL? (experimental; BR: libjxl-devel)
 # - SPEECH_SYNTHESIS? (experimental; BR: flite-devel >= 2.2)
 # - THUNDER? (BR: Thunder + ThunderClientLibraries)
 #
@@ -23,13 +22,13 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.40.x is stable, 2.41.x devel
-Version:	2.40.3
+# NOTE: 2.42.x is stable, 2.43.x devel
+Version:	2.42.1
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	5e22d37a1637f4aba0c55219eecae106
+# Source0-md5:	57b59842ee1e9987a3efce221fe8c69d
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
@@ -63,7 +62,7 @@ BuildRequires:	gstreamer-gl-devel >= 1.10.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.10.0
 BuildRequires:	gstreamer-transcoder-devel >= 1.20
 %{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.22.0}
-%{?with_gtk4:BuildRequires:	gtk4-devel >= 4.0}
+%{?with_gtk4:BuildRequires:	gtk4-devel >= 4.4}
 BuildRequires:	gtk-doc >= 1.10
 BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
@@ -79,6 +78,7 @@ BuildRequires:	libepoxy-devel >= 1.4.0
 BuildRequires:	libgcrypt-devel >= 1.7.0
 BuildRequires:	libicu-devel >= 61.2
 BuildRequires:	libjpeg-devel
+BuildRequires:	libjxl-devel >= 0.7.0
 BuildRequires:	libmanette-devel >= 0.2.4
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
@@ -87,7 +87,7 @@ BuildRequires:	libsecret-devel
 %{?with_libsoup2:BuildRequires:	libsoup-devel >= 2.54}
 %{?with_libsoup3:BuildRequires:	libsoup3-devel >= 3.0}
 # -std=c++2a; WebKitCommon.cmake says gcc 9.3.0 is minimum, but 9.5.0 fails to build
-BuildRequires:	libstdc++-devel >= 6:10
+BuildRequires:	libstdc++-devel >= 6:10.2
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	libwpe-devel >= 1.3.0
@@ -107,9 +107,9 @@ BuildRequires:	systemd-devel
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	unifdef
 %if %{with wayland}
-BuildRequires:	wayland-devel
+BuildRequires:	wayland-devel >= 1.15
 BuildRequires:	wayland-egl-devel
-BuildRequires:	wayland-protocols >= 1.12
+BuildRequires:	wayland-protocols >= 1.15
 %endif
 BuildRequires:	wpebackend-fdo-devel >= 1.6.0
 BuildRequires:	woff2-devel >= 1.0.2
@@ -133,12 +133,14 @@ Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk+3 >= 3.22.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
+Requires:	libjxl >= 0.7.0
 Requires:	libsoup >= 2.54
 Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
+Requires:	wayland >= 1.15
 Requires:	woff2 >= 1.0.2
 Requires:	wpebackend-fdo >= 1.6.0
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
@@ -164,7 +166,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup-devel >= 2.54
-Requires:	libstdc++-devel >= 6:8.3
+Requires:	libstdc++-devel >= 6:10.2
 
 %description devel
 Development files for WebKit for GTK+ 3.
@@ -200,12 +202,14 @@ Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk+3 >= 3.22.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
+Requires:	libjxl >= 0.7.0
 Requires:	libsoup3 >= 3.0
 Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
+Requires:	wayland >= 1.15
 Requires:	woff2 >= 1.0.2
 Requires:	wpebackend-fdo >= 1.6.0
 
@@ -225,7 +229,7 @@ Requires:	gtk-webkit4.1 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:8.3
+Requires:	libstdc++-devel >= 6:10.2
 
 %description -n gtk-webkit4.1-devel
 Development files for WebKit for GTK+ 3 with HTTP/2 support.
@@ -258,15 +262,17 @@ Requires:	freetype >= 1:2.9.0
 Requires:	glib2 >= 1:2.70.0
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
-Requires:	gtk4 >= 4.0
+Requires:	gtk4 >= 4.4
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
+Requires:	libjxl >= 0.7.0
 Requires:	libsoup3 >= 3.0
 Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
+Requires:	wayland >= 1.15
 Requires:	woff2 >= 1.0.2
 Requires:	wpebackend-fdo >= 1.6.0
 
@@ -282,9 +288,9 @@ Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK 4
 Group:		X11/Development/Libraries
 Requires:	gtk-webkit6 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
-Requires:	gtk4-devel >= 4.0
+Requires:	gtk4-devel >= 4.4
 Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:8.3
+Requires:	libstdc++-devel >= 6:10.2
 
 %description -n gtk-webkit6-devel
 Development files for WebKit for GTK 4.
