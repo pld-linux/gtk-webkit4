@@ -22,13 +22,13 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.42.x is stable, 2.43.x devel
-Version:	2.42.1
+# NOTE: 2.44.x is stable, 2.45.x devel
+Version:	2.44.0
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	57b59842ee1e9987a3efce221fe8c69d
+# Source0-md5:	20fef6a9122fc46f66f2f8550d5f08c6
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
@@ -36,6 +36,7 @@ Patch3:		%{name}-driver-version-suffix.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
+BuildRequires:	Mesa-libgbm-devel
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	OpenGLESv2-devel
 BuildRequires:	at-spi2-core-devel >= 2.5.3
@@ -54,16 +55,15 @@ BuildRequires:	glib2-devel >= 1:2.70.0
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
-BuildRequires:	gstreamer-devel >= 1.14
-BuildRequires:	gstreamer-gl-devel >= 1.10.0
-# codecparsers,mpegts with -DUSE_GSTREAMER_MPEGTS=ON
-#BuildRequires:	gstreamer-plugins-bad-devel >= 1.10.0
+BuildRequires:	gstreamer-devel >= 1.18.4
+BuildRequires:	gstreamer-gl-devel >= 1.18.4
+# codecparsers >= 1.18.4, mpegts >= 1.18.4, webrtc >= 1.20
+BuildRequires:	gstreamer-plugins-bad-devel >= 1.20
 # app,audio,fft,pbutils,tag,video
-BuildRequires:	gstreamer-plugins-base-devel >= 1.10.0
+BuildRequires:	gstreamer-plugins-base-devel >= 1.18.4
 BuildRequires:	gstreamer-transcoder-devel >= 1.20
 %{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.22.0}
-%{?with_gtk4:BuildRequires:	gtk4-devel >= 4.4}
-BuildRequires:	gtk-doc >= 1.10
+%{?with_gtk4:BuildRequires:	gtk4-devel >= 4.6.0}
 BuildRequires:	harfbuzz-devel >= 1.4.2
 BuildRequires:	harfbuzz-icu-devel >= 1.4.2
 BuildRequires:	hyphen-devel
@@ -74,7 +74,8 @@ BuildRequires:	libatomic-devel
 %endif
 %endif
 BuildRequires:	libavif-devel >= 0.9.0
-BuildRequires:	libepoxy-devel >= 1.4.0
+BuildRequires:	libdrm-devel
+BuildRequires:	libepoxy-devel >= 1.5.4
 BuildRequires:	libgcrypt-devel >= 1.7.0
 BuildRequires:	libicu-devel >= 61.2
 BuildRequires:	libjpeg-devel
@@ -94,12 +95,13 @@ BuildRequires:	libwpe-devel >= 1.3.0
 BuildRequires:	libxml2-devel >= 1:2.8.0
 BuildRequires:	libxslt-devel >= 1.1.7
 BuildRequires:	openjpeg2-devel >= 2.2.0
+BuildRequires:	openssl-devel >= 3.0.0
 BuildRequires:	pango-devel >= 1:1.32.0
 BuildRequires:	perl-base >= 1:5.10.0
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 1:2.7.0
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 2.026
+BuildRequires:	rpmbuild(macros) >= 2.029
 BuildRequires:	ruby >= 1:2.5
 BuildRequires:	ruby-modules >= 1:2.5
 BuildRequires:	sqlite3-devel >= 3
@@ -107,11 +109,11 @@ BuildRequires:	systemd-devel
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	unifdef
 %if %{with wayland}
-BuildRequires:	wayland-devel >= 1.15
+BuildRequires:	wayland-devel >= 1.20
 BuildRequires:	wayland-egl-devel
-BuildRequires:	wayland-protocols >= 1.15
+BuildRequires:	wayland-protocols >= 1.24
 %endif
-BuildRequires:	wpebackend-fdo-devel >= 1.6.0
+BuildRequires:	wpebackend-fdo-devel >= 1.9.0
 BuildRequires:	woff2-devel >= 1.0.2
 BuildRequires:	xdg-dbus-proxy
 BuildRequires:	xorg-lib-libICE-devel
@@ -132,6 +134,7 @@ Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk+3 >= 3.22.0
 Requires:	harfbuzz >= 1.4.2
+Requires:	libepoxy >= 1.5.4
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup >= 2.54
@@ -140,9 +143,9 @@ Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
-Requires:	wayland >= 1.15
+Requires:	wayland >= 1.20
 Requires:	woff2 >= 1.0.2
-Requires:	wpebackend-fdo >= 1.6.0
+Requires:	wpebackend-fdo >= 1.9.0
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
 # Source/JavaScriptCore/CMakeLists.txt /WTF_CPU_
 ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa mips ppc ppc64 ppc64le s390 s390x sh4
@@ -178,7 +181,6 @@ Pliki programistyczne komponentu WebKit dla GTK+ 3.
 Summary:	API documentation for WebKit GTK+ 3 port
 Summary(pl.UTF-8):	Dokumentacja API portu WebKitu do GTK+ 3
 Group:		Documentation
-Requires:	gtk-doc-common
 BuildArch:	noarch
 
 %description apidocs
@@ -209,9 +211,9 @@ Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
-Requires:	wayland >= 1.15
+Requires:	wayland >= 1.20
 Requires:	woff2 >= 1.0.2
-Requires:	wpebackend-fdo >= 1.6.0
+Requires:	wpebackend-fdo >= 1.9.0
 
 %description -n gtk-webkit4.1
 gtk-webkit4.1 is a port of the WebKit embeddable web component to GTK+
@@ -241,7 +243,6 @@ Pliki programistyczne komponentu WebKit dla GTK+ 3 z obsługą HTTP/2.
 Summary:	API documentation for WebKit GTK+ 3 port with HTTP/2 support
 Summary(pl.UTF-8):	Dokumentacja API portu WebKitu do GTK+ 3 z obsługą HTTP/2
 Group:		Documentation
-Requires:	gtk-doc-common
 BuildArch:	noarch
 
 %description -n gtk-webkit4.1-apidocs
@@ -262,7 +263,7 @@ Requires:	freetype >= 1:2.9.0
 Requires:	glib2 >= 1:2.70.0
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
-Requires:	gtk4 >= 4.4
+Requires:	gtk4 >= 4.6.0
 Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
@@ -272,9 +273,9 @@ Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
-Requires:	wayland >= 1.15
+Requires:	wayland >= 1.20
 Requires:	woff2 >= 1.0.2
-Requires:	wpebackend-fdo >= 1.6.0
+Requires:	wpebackend-fdo >= 1.9.0
 
 %description -n gtk-webkit6
 gtk-webkit6 is a port of the WebKit embeddable web component to GTK 4.
@@ -288,7 +289,7 @@ Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK 4
 Group:		X11/Development/Libraries
 Requires:	gtk-webkit6 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
-Requires:	gtk4-devel >= 4.4
+Requires:	gtk4-devel >= 4.6.0
 Requires:	libsoup3-devel >= 3.0
 Requires:	libstdc++-devel >= 6:10.2
 
@@ -302,7 +303,6 @@ Pliki programistyczne komponentu WebKit dla GTK 4.
 Summary:	API documentation for WebKit GTK 4 port
 Summary(pl.UTF-8):	Dokumentacja API portu WebKitu do GTK 4
 Group:		Documentation
-Requires:	gtk-doc-common
 BuildArch:	noarch
 
 %description -n gtk-webkit6-apidocs
@@ -342,7 +342,8 @@ for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?wit
 %endif
 	-DPORT=GTK \
 	-DSHOULD_INSTALL_JS_SHELL=ON \
-	$([ "$kind" = "gtk4" ] && echo -DUSE_GTK4=ON) \
+	$([ "$kind" != "gtk4" ] && echo -DUSE_GTK4=OFF) \
+	-DUSE_LIBBACKTRACE=OFF \
 	$([ "$kind" = "soup2" ] && echo -DUSE_SOUP2=ON)
 
 %{__make} -C build-${kind}
@@ -356,10 +357,8 @@ for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?wit
 	DESTDIR=$RPM_BUILD_ROOT
 done
 
-%if "%{_gtkdocdir}" != "%{_datadir}/gtk-doc/html"
-install -d $RPM_BUILD_ROOT%{_gtkdocdir}
-%{__mv} $RPM_BUILD_ROOT%{_datadir}/gtk-doc/html/* $RPM_BUILD_ROOT%{_gtkdocdir}
-%endif
+install -d $RPM_BUILD_ROOT%{_gidocdir}
+%{__mv} $RPM_BUILD_ROOT%{_docdir}/{javascriptcoregtk,webkit*gtk}-* $RPM_BUILD_ROOT%{_gidocdir}
 
 %{?with_gtk3:%{?with_libsoup2:%find_lang WebKitGTK-4.0}}
 %{?with_gtk3:%{?with_libsoup3:%find_lang WebKitGTK-4.1}}
@@ -418,9 +417,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/javascriptcoregtk-4.0
-%{_gtkdocdir}/webkit2gtk-4.0
-%{_gtkdocdir}/webkit2gtk-web-extension-4.0
+%{_gidocdir}/javascriptcoregtk-4.0
+%{_gidocdir}/webkit2gtk-4.0
+%{_gidocdir}/webkit2gtk-web-extension-4.0
 %endif
 
 %if %{with gtk3} && %{with libsoup3}
@@ -464,9 +463,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n gtk-webkit4.1-apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/javascriptcoregtk-4.1
-%{_gtkdocdir}/webkit2gtk-4.1
-%{_gtkdocdir}/webkit2gtk-web-extension-4.1
+%{_gidocdir}/javascriptcoregtk-4.1
+%{_gidocdir}/webkit2gtk-4.1
+%{_gidocdir}/webkit2gtk-web-extension-4.1
 %endif
 
 %if %{with gtk4}
@@ -510,7 +509,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n gtk-webkit6-apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/javascriptcoregtk-6.0
-%{_gtkdocdir}/webkitgtk-6.0
-%{_gtkdocdir}/webkitgtk-web-process-extension-6.0
+%{_gidocdir}/javascriptcoregtk-6.0
+%{_gidocdir}/webkitgtk-6.0
+%{_gidocdir}/webkitgtk-web-process-extension-6.0
 %endif
