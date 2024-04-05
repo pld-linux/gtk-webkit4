@@ -33,6 +33,7 @@ Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
 Patch3:		%{name}-driver-version-suffix.patch
+Patch4:		webkit-timer-size-assert.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -317,6 +318,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %if %{with lowmem}
