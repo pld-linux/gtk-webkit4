@@ -322,7 +322,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 
 %build
 %if %{with lowmem}
-CXXFLAGS="%{rpmcxxflags} --param ggc-min-expand=20 --param ggc-min-heapsize=65536"
+CXXFLAGS="%{rpmcxxflags} -DNDEBUG --param ggc-min-expand=20 --param ggc-min-heapsize=65536"
 %endif
 for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?with_gtk4:gtk4} ; do
 %cmake -B build-${kind} \
