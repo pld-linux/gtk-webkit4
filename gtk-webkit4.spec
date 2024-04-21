@@ -23,17 +23,16 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.44.x is stable, 2.45.x devel
-Version:	2.44.0
+Version:	2.44.1
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	20fef6a9122fc46f66f2f8550d5f08c6
+# Source0-md5:	b3a4504892162b30a774d3afde4707f7
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
 Patch3:		%{name}-driver-version-suffix.patch
-Patch4:		webkit-timer-size-assert.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -318,7 +317,6 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 %if %{with lowmem}
