@@ -15,10 +15,9 @@
 %bcond_with	lowmem2		# try to reduce build memory usage by disabling unified build (long)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
-# memory constraints during linking
-%ifarch %{ix86} x32
+# memory constraints during linking and x86_64 debuginfo packages kill poldek
 %define		_enable_debug_packages		0
-%endif
+
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
