@@ -23,7 +23,7 @@ Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.44.x is stable, 2.45.x devel
 Version:	2.44.4
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
@@ -32,6 +32,7 @@ Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
 Patch3:		%{name}-driver-version-suffix.patch
+Patch4:		%{name}-introspection-fix.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -316,6 +317,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %if %{with lowmem}
