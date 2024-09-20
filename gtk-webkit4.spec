@@ -10,6 +10,7 @@
 %bcond_without	libsoup3	# webkit-4.1 (libsoup3 based) variant (HTTP/2 support)
 %bcond_without	gtk3		# webkit-4.x (gtk3 based) variants
 %bcond_without	gtk4		# webkit-6.0 (gtk4/libsoup3 based) variant
+%bcond_without	sysprof		# sysprof profiling
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
 %bcond_with	lowmem		# try to reduce build memory usage by adjusting gcc gc
 %bcond_with	lowmem2		# try to reduce build memory usage by disabling unified build (long)
@@ -21,18 +22,17 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.44.x is stable, 2.45.x devel
-Version:	2.44.4
-Release:	2
+# NOTE: 2.46.x is stable, 2.47.x devel
+Version:	2.46.0
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	fd031b34f22c09f91e97cca3a7dbc426
+# Source0-md5:	866d458444c2e8bed6cbfdd61f0d07a9
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
 Patch3:		%{name}-driver-version-suffix.patch
-Patch4:		%{name}-introspection-fix.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -87,11 +87,10 @@ BuildRequires:	libseccomp-devel
 BuildRequires:	libsecret-devel
 %{?with_libsoup2:BuildRequires:	libsoup-devel >= 2.54}
 %{?with_libsoup3:BuildRequires:	libsoup3-devel >= 3.0}
-# -std=c++2a; WebKitCommon.cmake says gcc 9.3.0 is minimum, but 9.5.0 fails to build
-BuildRequires:	libstdc++-devel >= 6:10.2
+# -std=c++23; WebKitCommon.cmake says gcc 11.2.0 is minimum
+BuildRequires:	libstdc++-devel >= 6:11.2
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
-BuildRequires:	libwpe-devel >= 1.3.0
 BuildRequires:	libxml2-devel >= 1:2.8.0
 BuildRequires:	libxslt-devel >= 1.1.7
 BuildRequires:	openjpeg2-devel >= 2.2.0
@@ -105,6 +104,7 @@ BuildRequires:	rpmbuild(macros) >= 2.029
 BuildRequires:	ruby >= 1:2.5
 BuildRequires:	ruby-modules >= 1:2.5
 BuildRequires:	sqlite3-devel >= 3
+%{?with_sysprof:BuildRequires:	sysprof-devel >= 3.38}
 BuildRequires:	systemd-devel
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	unifdef
@@ -113,7 +113,6 @@ BuildRequires:	wayland-devel >= 1.20
 BuildRequires:	wayland-egl-devel
 BuildRequires:	wayland-protocols >= 1.24
 %endif
-BuildRequires:	wpebackend-fdo-devel >= 1.9.0
 BuildRequires:	woff2-devel >= 1.0.2
 BuildRequires:	xdg-dbus-proxy
 BuildRequires:	xorg-lib-libICE-devel
@@ -138,14 +137,12 @@ Requires:	libepoxy >= 1.5.4
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup >= 2.54
-Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	wayland >= 1.20
 Requires:	woff2 >= 1.0.2
-Requires:	wpebackend-fdo >= 1.9.0
 %{?with_introspection:Conflicts:	gir-repository < 0.6.5-7}
 # Source/JavaScriptCore/CMakeLists.txt /WTF_CPU_
 ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa mips ppc ppc64 ppc64le s390 s390x sh4
@@ -169,7 +166,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup-devel >= 2.54
-Requires:	libstdc++-devel >= 6:10.2
+Requires:	libstdc++-devel >= 6:11.2
 
 %description devel
 Development files for WebKit for GTK+ 3.
@@ -206,14 +203,12 @@ Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup3 >= 3.0
-Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	wayland >= 1.20
 Requires:	woff2 >= 1.0.2
-Requires:	wpebackend-fdo >= 1.9.0
 
 %description -n gtk-webkit4.1
 gtk-webkit4.1 is a port of the WebKit embeddable web component to GTK+
@@ -231,7 +226,7 @@ Requires:	gtk-webkit4.1 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
 Requires:	gtk+3-devel >= 3.22.0
 Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:10.2
+Requires:	libstdc++-devel >= 6:11.2
 
 %description -n gtk-webkit4.1-devel
 Development files for WebKit for GTK+ 3 with HTTP/2 support.
@@ -268,14 +263,12 @@ Requires:	harfbuzz >= 1.4.2
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup3 >= 3.0
-Requires:	libwpe >= 1.3.0
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	wayland >= 1.20
 Requires:	woff2 >= 1.0.2
-Requires:	wpebackend-fdo >= 1.9.0
 
 %description -n gtk-webkit6
 gtk-webkit6 is a port of the WebKit embeddable web component to GTK 4.
@@ -291,7 +284,7 @@ Requires:	gtk-webkit6 = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.70.0
 Requires:	gtk4-devel >= 4.6.0
 Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:10.2
+Requires:	libstdc++-devel >= 6:11.2
 
 %description -n gtk-webkit6-devel
 Development files for WebKit for GTK 4.
@@ -317,7 +310,6 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 %if %{with lowmem}
@@ -345,7 +337,8 @@ for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?wit
 	-DSHOULD_INSTALL_JS_SHELL=ON \
 	$([ "$kind" != "gtk4" ] && echo -DUSE_GTK4=OFF) \
 	-DUSE_LIBBACKTRACE=OFF \
-	$([ "$kind" = "soup2" ] && echo -DUSE_SOUP2=ON)
+	$([ "$kind" = "soup2" ] && echo -DUSE_SOUP2=ON) \
+	%{!?with_sysprof:-DUSE_SYSPROF_CAPTURE=OFF}
 
 %{__make} -C build-${kind}
 done
