@@ -24,7 +24,7 @@ Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.46.x is stable, 2.47.x devel
 Version:	2.46.6
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
@@ -312,9 +312,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch -P 3 -p1
 
 %build
-%if %{with lowmem}
-CXXFLAGS="%{rpmcxxflags} -DNDEBUG --param ggc-min-expand=20 --param ggc-min-heapsize=65536"
-%endif
+CXXFLAGS="%{rpmcxxflags} -DNDEBUG %{?with_lowmem:--param ggc-min-expand=20 --param ggc-min-heapsize=65536}"
 for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?with_gtk4:gtk4} ; do
 %cmake -B build-${kind} \
 	-DENABLE_GEOLOCATION=ON \
