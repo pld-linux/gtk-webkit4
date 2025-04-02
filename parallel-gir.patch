@@ -54,16 +54,16 @@ diff --git a/Source/cmake/FindGIDocgen.cmake b/Source/cmake/FindGIDocgen.cmake
 index 88c90633e63f..ef560db7a2f0 100644
 --- a/Source/cmake/FindGIDocgen.cmake
 +++ b/Source/cmake/FindGIDocgen.cmake
-@@ -180,7 +180,7 @@ function(GI_DOCGEN namespace toml)
+@@ -197,7 +197,7 @@ function(GI_DOCGEN namespace toml)
+         list(APPEND unifdef_defines -DWPE=1 -DGTK=0)
      endif ()
-     set(outdir "${CMAKE_BINARY_DIR}/Documentation/${package}")
  
 -    set(docdeps "${toml_path};${gir_path}")
 +    set(docdeps "${toml_path};gir-${namespace}")
      foreach (item IN LISTS opt_CONTENT_TEMPLATES)
          get_filename_component(filename "${item}" NAME)
-         configure_file("${item}.in" "${contentdir}/${filename}" @ONLY)
-@@ -239,10 +239,11 @@ function(GI_DOCGEN namespace toml)
+         configure_file("${item}.in" "${contentdir}/${filename}.in" @ONLY)
+@@ -276,10 +276,11 @@ function(GI_DOCGEN namespace toml)
      add_custom_target("doc-check-${namespace}"
          COMMENT "Checking documentation: ${namespace}"
          WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
@@ -76,6 +76,3 @@ index 88c90633e63f..ef560db7a2f0 100644
  
      if (NOT TARGET doc-check-all)
          add_custom_target(doc-check-all COMMENT "Check all documentation targets")
--- 
-2.41.0
-

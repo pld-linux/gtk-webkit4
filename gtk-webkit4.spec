@@ -1,8 +1,10 @@
 # TODO: review configure options:
 # - FTL_JIT on !x86_64?
-# - WEB_RTC+MEDIA_STREAM (experimental; BR: openwebrtc)
-# - SPEECH_SYNTHESIS? (experimental; BR: flite-devel >= 2.2)
+# - WEB_RTC (experimental) + MEDIA_STREAM (BR: openwebrtc)
+# - ENCRYPTED_MEDIA (experimental)
 # - THUNDER? (BR: Thunder + ThunderClientLibraries)
+# - WEBDRIVER_BIDI (experimental)
+# - WK_WEB_EXTENSIONS (experimental)
 #
 # Conditional build:
 %bcond_without	introspection	# GObject introspection
@@ -22,13 +24,13 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.46.x is stable, 2.47.x devel
-Version:	2.46.6
-Release:	2
+# NOTE: 2.48.x is stable, 2.49.x devel
+Version:	2.48.0
+Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	10b5b88ffe8611202c45cfdc10a2bd72
+# Source0-md5:	a140f819d85111dd67e103850532187f
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
@@ -46,6 +48,8 @@ BuildRequires:	cairo-devel >= 1.16.0
 BuildRequires:	cmake >= 3.20
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	enchant2-devel >= 2
+# or libspiel-devel with -DUSE_SPIEL=ON
+BuildRequires:	flite-devel >= 2.2
 BuildRequires:	fontconfig-devel >= 2.13.0
 BuildRequires:	freetype-devel >= 1:2.9.0
 BuildRequires:	gettext-devel
@@ -55,17 +59,18 @@ BuildRequires:	glib2-devel >= 1:2.70.0
 BuildRequires:	glibc-misc
 %{?with_introspection:BuildRequires:	gobject-introspection-devel >= 1.32.0}
 BuildRequires:	gperf >= 3.0.1
+# gstreamer,gstreamer-base
 BuildRequires:	gstreamer-devel >= 1.18.4
 BuildRequires:	gstreamer-gl-devel >= 1.18.4
-# codecparsers >= 1.18.4, mpegts >= 1.18.4, webrtc >= 1.20
-BuildRequires:	gstreamer-plugins-bad-devel >= 1.20
-# app,audio,fft,pbutils,tag,video
+# codecparsers,mpegts,webrtc
+BuildRequires:	gstreamer-plugins-bad-devel >= 1.18.4
+# allocators,app,audio,fft,pbutils,rtp,sdp,tag,video
 BuildRequires:	gstreamer-plugins-base-devel >= 1.18.4
-BuildRequires:	gstreamer-transcoder-devel >= 1.20
+BuildRequires:	gstreamer-transcoder-devel >= 1.18.4
 %{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.22.0}
 %{?with_gtk4:BuildRequires:	gtk4-devel >= 4.6.0}
-BuildRequires:	harfbuzz-devel >= 1.4.2
-BuildRequires:	harfbuzz-icu-devel >= 1.4.2
+BuildRequires:	harfbuzz-devel >= 2.7.4
+BuildRequires:	harfbuzz-icu-devel >= 2.7.4
 BuildRequires:	hyphen-devel
 BuildRequires:	lcms2-devel >= 2
 %ifarch %arch64
@@ -77,7 +82,7 @@ BuildRequires:	libavif-devel >= 0.9.0
 BuildRequires:	libdrm-devel
 BuildRequires:	libepoxy-devel >= 1.5.4
 BuildRequires:	libgcrypt-devel >= 1.7.0
-BuildRequires:	libicu-devel >= 61.2
+BuildRequires:	libicu-devel >= 70.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libjxl-devel >= 0.7.0
 BuildRequires:	libmanette-devel >= 0.2.4
@@ -91,8 +96,8 @@ BuildRequires:	libsecret-devel
 BuildRequires:	libstdc++-devel >= 6:11.2
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
-BuildRequires:	libxml2-devel >= 1:2.8.0
-BuildRequires:	libxslt-devel >= 1.1.7
+BuildRequires:	libxml2-devel >= 1:2.9.13
+BuildRequires:	libxslt-devel >= 1.1.13
 BuildRequires:	openjpeg2-devel >= 2.2.0
 BuildRequires:	openssl-devel >= 3.0.0
 BuildRequires:	pango-devel >= 1:1.32.0
@@ -132,13 +137,13 @@ Requires:	glib2 >= 1:2.70.0
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk+3 >= 3.22.0
-Requires:	harfbuzz >= 1.4.2
+Requires:	harfbuzz >= 2.7.4
 Requires:	libepoxy >= 1.5.4
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup >= 2.54
-Requires:	libxml2 >= 1:2.8.0
-Requires:	libxslt >= 1.1.7
+Requires:	libxml2 >= 1:2.9.13
+Requires:	libxslt >= 1.1.13
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	wayland >= 1.20
@@ -199,12 +204,12 @@ Requires:	glib2 >= 1:2.70.0
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk+3 >= 3.22.0
-Requires:	harfbuzz >= 1.4.2
+Requires:	harfbuzz >= 2.7.4
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup3 >= 3.0
-Requires:	libxml2 >= 1:2.8.0
-Requires:	libxslt >= 1.1.7
+Requires:	libxml2 >= 1:2.9.13
+Requires:	libxslt >= 1.1.13
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	wayland >= 1.20
@@ -259,12 +264,12 @@ Requires:	glib2 >= 1:2.70.0
 Requires:	gstreamer >= 1.2.3
 Requires:	gstreamer-plugins-base >= 1.2.3
 Requires:	gtk4 >= 4.6.0
-Requires:	harfbuzz >= 1.4.2
+Requires:	harfbuzz >= 2.7.4
 Requires:	libgcrypt >= 1.7.0
 Requires:	libjxl >= 0.7.0
 Requires:	libsoup3 >= 3.0
-Requires:	libxml2 >= 1:2.8.0
-Requires:	libxslt >= 1.1.7
+Requires:	libxml2 >= 1:2.9.13
+Requires:	libxslt >= 1.1.13
 Requires:	openjpeg2 >= 2.2.0
 Requires:	pango >= 1:1.32.0
 Requires:	wayland >= 1.20
@@ -386,6 +391,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/webkit2gtk-4.0
 %endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/MiniBrowser
+%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitGPUProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
@@ -432,6 +438,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/webkit2gtk-4.1
 %endif
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/MiniBrowser
+%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitGPUProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/jsc
@@ -478,6 +485,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/webkitgtk-6.0
 %endif
 %attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/MiniBrowser
+%attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/WebKitGPUProcess
 %attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/WebKitNetworkProcess
 %attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/WebKitWebProcess
 %attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/jsc
