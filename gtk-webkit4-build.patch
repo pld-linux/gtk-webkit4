@@ -1,0 +1,11 @@
+--- webkitgtk-2.48.1/Source/WebCore/platform/audio/DenormalDisabler.cpp.orig	2025-04-02 07:41:30.802833600 +0200
++++ webkitgtk-2.48.1/Source/WebCore/platform/audio/DenormalDisabler.cpp	2025-04-10 06:26:55.966729226 +0200
+@@ -91,7 +91,7 @@ DenormalDisabler::~DenormalDisabler()
+     }
+ }
+ #else
+-DenormalDisabler::DenormalDisabler() = default
++DenormalDisabler::DenormalDisabler() = default;
+ DenormalDisabler::~DenormalDisabler() = default;
+ #endif
+ 
