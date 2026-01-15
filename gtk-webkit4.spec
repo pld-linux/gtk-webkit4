@@ -24,13 +24,13 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.48.x is stable, 2.49.x devel
-Version:	2.48.5
+# NOTE: 2.50.x is stable, 2.51.x devel
+Version:	2.50.4
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	23e26bc4e30b80462cb1030fab352409
+# Source0-md5:	d0c024b61c97a26012c8d7ad237e7c2f
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
@@ -93,7 +93,7 @@ BuildRequires:	libsecret-devel
 %{?with_libsoup2:BuildRequires:	libsoup-devel >= 2.54}
 %{?with_libsoup3:BuildRequires:	libsoup3-devel >= 3.0}
 # -std=c++23; WebKitCommon.cmake says gcc 11.2.0 is minimum
-BuildRequires:	libstdc++-devel >= 6:11.2
+BuildRequires:	libstdc++-devel >= 6:12.2
 BuildRequires:	libtasn1-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	libxml2-devel >= 1:2.9.13
