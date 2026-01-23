@@ -35,6 +35,7 @@ Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
 Patch3:		%{name}-driver-version-suffix.patch
+Patch4:		max-bundle-size.patch
 URL:		https://webkitgtk.org/
 BuildRequires:	/usr/bin/ld.gold
 BuildRequires:	EGL-devel
@@ -315,6 +316,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 %patch -P 1 -p1
 %patch -P 2 -p1
 %patch -P 3 -p1
+%patch -P 4 -p1
 
 %build
 CXXFLAGS="%{rpmcxxflags} -DNDEBUG %{?with_lowmem:--param ggc-min-expand=20 --param ggc-min-heapsize=65536}"
@@ -341,7 +343,8 @@ for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?wit
 	$([ "$kind" != "gtk4" ] && echo -DUSE_GTK4=OFF) \
 	-DUSE_LIBBACKTRACE=OFF \
 	$([ "$kind" = "soup2" ] && echo -DUSE_SOUP2=ON) \
-	%{!?with_sysprof:-DUSE_SYSPROF_CAPTURE=OFF}
+	%{!?with_sysprof:-DUSE_SYSPROF_CAPTURE=OFF} \
+	%{?max_bundle_size:-DUNIFIED_BUILD_MAX_BUNDLE_SIZE=%{max_bundle_size}}
 
 %{__make} -C build-${kind}
 done
