@@ -14,7 +14,11 @@
 %bcond_without	gtk4		# webkit-6.0 (gtk4/libsoup3 based) variant
 %bcond_without	sysprof		# sysprof profiling
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
+%ifarch x32
+%bcond_without	lowmem		# try to reduce build memory usage by adjusting gcc gc
+%else
 %bcond_with	lowmem		# try to reduce build memory usage by adjusting gcc gc
+%endif
 %bcond_with	lowmem2		# try to reduce build memory usage by disabling unified build (long)
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
