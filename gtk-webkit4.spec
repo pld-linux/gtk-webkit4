@@ -29,12 +29,12 @@ Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # NOTE: 2.50.x is stable, 2.51.x devel
-Version:	2.50.4
+Version:	2.50.6
 Release:	1
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
-# Source0-md5:	d0c024b61c97a26012c8d7ad237e7c2f
+# Source0-md5:	30e318a7bd316fcd1937902f987f7d65
 Patch0:		x32.patch
 Patch1:		%{name}-icu59.patch
 Patch2:		parallel-gir.patch
@@ -385,10 +385,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc NEWS
 %attr(755,root,root) %{_bindir}/WebKitWebDriver-4.0
-%attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.0.so.37
-%attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libjavascriptcoregtk-4.0.so.18
+%{_libdir}/libwebkit2gtk-4.0.so.*.*.*
+%ghost %{_libdir}/libwebkit2gtk-4.0.so.37
+%{_libdir}/libjavascriptcoregtk-4.0.so.*.*.*
+%ghost %{_libdir}/libjavascriptcoregtk-4.0.so.18
 %if %{with introspection}
 %{_libdir}/girepository-1.0/JavaScriptCore-4.0.typelib
 %{_libdir}/girepository-1.0/WebKit2-4.0.typelib
@@ -404,12 +404,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.0/jsc
 %dir %{_libdir}/webkit2gtk-4.0
 %dir %{_libdir}/webkit2gtk-4.0/injected-bundle
-%attr(755,root,root) %{_libdir}/webkit2gtk-4.0/injected-bundle/libwebkit2gtkinjectedbundle.so
+%{_libdir}/webkit2gtk-4.0/injected-bundle/libwebkit2gtkinjectedbundle.so
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libwebkit2gtk-4.0.so
-%attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.0.so
+%{_libdir}/libwebkit2gtk-4.0.so
+%{_libdir}/libjavascriptcoregtk-4.0.so
 %if %{with introspection}
 %{_datadir}/gir-1.0/JavaScriptCore-4.0.gir
 %{_datadir}/gir-1.0/WebKit2-4.0.gir
@@ -432,10 +432,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc NEWS
 %attr(755,root,root) %{_bindir}/WebKitWebDriver-4.1
-%attr(755,root,root) %{_libdir}/libwebkit2gtk-4.1.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libwebkit2gtk-4.1.so.0
-%attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.1.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libjavascriptcoregtk-4.1.so.0
+%{_libdir}/libwebkit2gtk-4.1.so.*.*.*
+%ghost %{_libdir}/libwebkit2gtk-4.1.so.0
+%{_libdir}/libjavascriptcoregtk-4.1.so.*.*.*
+%ghost %{_libdir}/libjavascriptcoregtk-4.1.so.0
 %if %{with introspection}
 %{_libdir}/girepository-1.0/JavaScriptCore-4.1.typelib
 %{_libdir}/girepository-1.0/WebKit2-4.1.typelib
@@ -451,12 +451,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/jsc
 %dir %{_libdir}/webkit2gtk-4.1
 %dir %{_libdir}/webkit2gtk-4.1/injected-bundle
-%attr(755,root,root) %{_libdir}/webkit2gtk-4.1/injected-bundle/libwebkit2gtkinjectedbundle.so
+%{_libdir}/webkit2gtk-4.1/injected-bundle/libwebkit2gtkinjectedbundle.so
 
 %files -n gtk-webkit4.1-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libwebkit2gtk-4.1.so
-%attr(755,root,root) %{_libdir}/libjavascriptcoregtk-4.1.so
+%{_libdir}/libwebkit2gtk-4.1.so
+%{_libdir}/libjavascriptcoregtk-4.1.so
 %if %{with introspection}
 %{_datadir}/gir-1.0/JavaScriptCore-4.1.gir
 %{_datadir}/gir-1.0/WebKit2-4.1.gir
@@ -479,10 +479,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc NEWS
 %attr(755,root,root) %{_bindir}/WebKitWebDriver-6.0
-%attr(755,root,root) %{_libdir}/libjavascriptcoregtk-6.0.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libjavascriptcoregtk-6.0.so.1
-%attr(755,root,root) %{_libdir}/libwebkitgtk-6.0.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libwebkitgtk-6.0.so.4
+%{_libdir}/libjavascriptcoregtk-6.0.so.*.*.*
+%ghost %{_libdir}/libjavascriptcoregtk-6.0.so.1
+%{_libdir}/libwebkitgtk-6.0.so.*.*.*
+%ghost %{_libdir}/libwebkitgtk-6.0.so.4
 %if %{with introspection}
 %{_libdir}/girepository-1.0/JavaScriptCore-6.0.typelib
 %{_libdir}/girepository-1.0/WebKit-6.0.typelib
@@ -498,12 +498,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/jsc
 %dir %{_libdir}/webkitgtk-6.0
 %dir %{_libdir}/webkitgtk-6.0/injected-bundle
-%attr(755,root,root) %{_libdir}/webkitgtk-6.0/injected-bundle/libwebkitgtkinjectedbundle.so
+%{_libdir}/webkitgtk-6.0/injected-bundle/libwebkitgtkinjectedbundle.so
 
 %files -n gtk-webkit6-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libwebkitgtk-6.0.so
-%attr(755,root,root) %{_libdir}/libjavascriptcoregtk-6.0.so
+%{_libdir}/libwebkitgtk-6.0.so
+%{_libdir}/libjavascriptcoregtk-6.0.so
 %if %{with introspection}
 %{_datadir}/gir-1.0/JavaScriptCore-6.0.gir
 %{_datadir}/gir-1.0/WebKit-6.0.gir
