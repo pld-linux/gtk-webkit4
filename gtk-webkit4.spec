@@ -20,6 +20,7 @@
 %bcond_with	lowmem		# try to reduce build memory usage by adjusting gcc gc
 %endif
 %bcond_with	lowmem2		# try to reduce build memory usage by disabling unified build (long)
+#define max_bundle_size		# max size of unified build bundle, default is 8
 #
 # it's not possible to build this with debuginfo on 32bit archs due to
 # memory constraints during linking and x86_64 debuginfo packages kill poldek
@@ -28,7 +29,7 @@
 Summary:	Port of WebKit embeddable web component to GTK+ 3
 Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
-# NOTE: 2.50.x is stable, 2.51.x devel
+# 2.50.x is the last with webkit2gtk-4.0 library (gtk+3/libsoup-2 variant); other variants continuation in gtk-webkit4.1.spec
 Version:	2.50.6
 Release:	1
 License:	BSD-like
@@ -72,8 +73,7 @@ BuildRequires:	gstreamer-plugins-bad-devel >= 1.18.4
 # allocators,app,audio,fft,pbutils,rtp,sdp,tag,video
 BuildRequires:	gstreamer-plugins-base-devel >= 1.18.4
 BuildRequires:	gstreamer-transcoder-devel >= 1.18.4
-%{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.22.0}
-%{?with_gtk4:BuildRequires:	gtk4-devel >= 4.6.0}
+BuildRequires:	gtk+3-devel >= 3.22.0
 BuildRequires:	harfbuzz-devel >= 2.7.4
 BuildRequires:	harfbuzz-icu-devel >= 2.7.4
 BuildRequires:	hyphen-devel
@@ -95,8 +95,7 @@ BuildRequires:	libnotify-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libseccomp-devel
 BuildRequires:	libsecret-devel
-%{?with_libsoup2:BuildRequires:	libsoup-devel >= 2.54}
-%{?with_libsoup3:BuildRequires:	libsoup3-devel >= 3.0}
+BuildRequires:	libsoup-devel >= 2.54
 # -std=c++23; WebKitCommon.cmake says gcc 11.2.0 is minimum
 BuildRequires:	libstdc++-devel >= 6:12.2
 BuildRequires:	libtasn1-devel
@@ -196,124 +195,6 @@ API documentation for WebKit GTK+ 3 port.
 %description apidocs -l pl.UTF-8
 Dokumentacja API portu WebKitu do GTK+ 3.
 
-%package -n gtk-webkit4.1
-Summary:	Port of WebKit embeddable web component to GTK+ 3 with HTTP/2 support
-Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3 z obsługą HTTP/2
-Group:		X11/Libraries
-Requires:	at-spi2-core-libs >= 2.5.3
-Requires:	atk >= 1:2.16.0
-Requires:	cairo >= 1.16.0
-Requires:	fontconfig-libs >= 2.13.0
-Requires:	freetype >= 1:2.9.0
-Requires:	glib2 >= 1:2.70.0
-Requires:	gstreamer >= 1.2.3
-Requires:	gstreamer-plugins-base >= 1.2.3
-Requires:	gtk+3 >= 3.22.0
-Requires:	harfbuzz >= 2.7.4
-Requires:	libgcrypt >= 1.7.0
-Requires:	libjxl >= 0.7.0
-Requires:	libsoup3 >= 3.0
-Requires:	libxml2 >= 1:2.9.13
-Requires:	libxslt >= 1.1.13
-Requires:	openjpeg2 >= 2.2.0
-Requires:	pango >= 1:1.32.0
-Requires:	wayland >= 1.20
-Requires:	woff2 >= 1.0.2
-
-%description -n gtk-webkit4.1
-gtk-webkit4.1 is a port of the WebKit embeddable web component to GTK+
-3 with HTTP/2 (libsoup 3) support.
-
-%description -n gtk-webkit4.1 -l pl.UTF-8
-gtk-webkit4.1 to port osadzalnego komponentu WWW WebKit do GTK+ 3 z
-obsługą HTTP/2 (libsoup 3).
-
-%package -n gtk-webkit4.1-devel
-Summary:	Development files for WebKit for GTK+ 3 with HTTP/2 support
-Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK+ 3 z obsługą HTTP/2
-Group:		X11/Development/Libraries
-Requires:	gtk-webkit4.1 = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.70.0
-Requires:	gtk+3-devel >= 3.22.0
-Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:11.2
-
-%description -n gtk-webkit4.1-devel
-Development files for WebKit for GTK+ 3 with HTTP/2 support.
-
-%description -n gtk-webkit4.1-devel -l pl.UTF-8
-Pliki programistyczne komponentu WebKit dla GTK+ 3 z obsługą HTTP/2.
-
-%package -n gtk-webkit4.1-apidocs
-Summary:	API documentation for WebKit GTK+ 3 port with HTTP/2 support
-Summary(pl.UTF-8):	Dokumentacja API portu WebKitu do GTK+ 3 z obsługą HTTP/2
-Group:		Documentation
-BuildArch:	noarch
-
-%description -n gtk-webkit4.1-apidocs
-API documentation for WebKit GTK+ 3 port with HTTP/2 support.
-
-%description -n gtk-webkit4.1-apidocs -l pl.UTF-8
-Dokumentacja API portu WebKitu do GTK+ 3 z obsługą HTTP/2.
-
-%package -n gtk-webkit6
-Summary:	Port of WebKit embeddable web component to GTK 4
-Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK 4
-Group:		X11/Libraries
-Requires:	at-spi2-core-libs >= 2.5.3
-Requires:	atk >= 1:2.16.0
-Requires:	cairo >= 1.16.0
-Requires:	fontconfig-libs >= 2.13.0
-Requires:	freetype >= 1:2.9.0
-Requires:	glib2 >= 1:2.70.0
-Requires:	gstreamer >= 1.2.3
-Requires:	gstreamer-plugins-base >= 1.2.3
-Requires:	gtk4 >= 4.6.0
-Requires:	harfbuzz >= 2.7.4
-Requires:	libgcrypt >= 1.7.0
-Requires:	libjxl >= 0.7.0
-Requires:	libsoup3 >= 3.0
-Requires:	libxml2 >= 1:2.9.13
-Requires:	libxslt >= 1.1.13
-Requires:	openjpeg2 >= 2.2.0
-Requires:	pango >= 1:1.32.0
-Requires:	wayland >= 1.20
-Requires:	woff2 >= 1.0.2
-
-%description -n gtk-webkit6
-gtk-webkit6 is a port of the WebKit embeddable web component to GTK 4.
-
-%description -n gtk-webkit6 -l pl.UTF-8
-gtk-webkit6 to port osadzalnego komponentu WWW WebKit do GTK+ 4.
-
-%package -n gtk-webkit6-devel
-Summary:	Development files for WebKit for GTK 4
-Summary(pl.UTF-8):	Pliki programistyczne komponentu WebKit dla GTK 4
-Group:		X11/Development/Libraries
-Requires:	gtk-webkit6 = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.70.0
-Requires:	gtk4-devel >= 4.6.0
-Requires:	libsoup3-devel >= 3.0
-Requires:	libstdc++-devel >= 6:11.2
-
-%description -n gtk-webkit6-devel
-Development files for WebKit for GTK 4.
-
-%description -n gtk-webkit6-devel -l pl.UTF-8
-Pliki programistyczne komponentu WebKit dla GTK 4.
-
-%package -n gtk-webkit6-apidocs
-Summary:	API documentation for WebKit GTK 4 port
-Summary(pl.UTF-8):	Dokumentacja API portu WebKitu do GTK 4
-Group:		Documentation
-BuildArch:	noarch
-
-%description -n gtk-webkit6-apidocs
-API documentation for WebKit GTK 4 port.
-
-%description -n gtk-webkit6-apidocs -l pl.UTF-8
-Dokumentacja API portu WebKitu do GTK 4.
-
 %prep
 %setup -q -n webkitgtk-%{version}
 %patch -P 0 -p1
@@ -324,8 +205,7 @@ Dokumentacja API portu WebKitu do GTK 4.
 
 %build
 CXXFLAGS="%{rpmcxxflags} -DNDEBUG %{?with_lowmem:--param ggc-min-expand=20 --param ggc-min-heapsize=65536}"
-for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?with_gtk4:gtk4} ; do
-%cmake -B build-${kind} \
+%cmake -B build-soup2 \
 	-DENABLE_GEOLOCATION=ON \
 	-DENABLE_GTKDOC=ON \
 	%{!?with_introspection:-DENABLE_INTROSPECTION=OFF} \
@@ -344,29 +224,24 @@ for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?wit
 %endif
 	-DPORT=GTK \
 	-DSHOULD_INSTALL_JS_SHELL=ON \
-	$([ "$kind" != "gtk4" ] && echo -DUSE_GTK4=OFF) \
+	-DUSE_GTK4=OFF \
 	-DUSE_LIBBACKTRACE=OFF \
-	$([ "$kind" = "soup2" ] && echo -DUSE_SOUP2=ON) \
+	-DUSE_SOUP2=ON \
 	%{!?with_sysprof:-DUSE_SYSPROF_CAPTURE=OFF} \
 	%{?max_bundle_size:-DUNIFIED_BUILD_MAX_BUNDLE_SIZE=%{max_bundle_size}}
 
-%{__make} -C build-${kind}
-done
+%{__make} -C build-soup2
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-for kind in %{?with_gtk3:%{?with_libsoup2:soup2} %{?with_libsoup3:soup3}} %{?with_gtk4:gtk4} ; do
-%{__make} -C build-${kind} install \
+%{__make} -C build-soup2 install \
 	DESTDIR=$RPM_BUILD_ROOT
-done
 
 install -d $RPM_BUILD_ROOT%{_gidocdir}
 %{__mv} $RPM_BUILD_ROOT%{_docdir}/{javascriptcoregtk,webkit*gtk}-* $RPM_BUILD_ROOT%{_gidocdir}
 
-%{?with_gtk3:%{?with_libsoup2:%find_lang WebKitGTK-4.0}}
-%{?with_gtk3:%{?with_libsoup3:%find_lang WebKitGTK-4.1}}
-%{?with_gtk4:%find_lang WebKitGTK-6.0}
+%find_lang WebKitGTK-4.0
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -374,13 +249,6 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%post	-n gtk-webkit4.1 -p /sbin/ldconfig
-%postun	-n gtk-webkit4.1 -p /sbin/ldconfig
-
-%post	-n gtk-webkit6 -p /sbin/ldconfig
-%postun	-n gtk-webkit6 -p /sbin/ldconfig
-
-%if %{with gtk3} && %{with libsoup2}
 %files -f WebKitGTK-4.0.lang
 %defattr(644,root,root,755)
 %doc NEWS
@@ -425,98 +293,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_gidocdir}/javascriptcoregtk-4.0
 %{_gidocdir}/webkit2gtk-4.0
 %{_gidocdir}/webkit2gtk-web-extension-4.0
-%endif
-
-%if %{with gtk3} && %{with libsoup3}
-%files -n gtk-webkit4.1 -f WebKitGTK-4.1.lang
-%defattr(644,root,root,755)
-%doc NEWS
-%attr(755,root,root) %{_bindir}/WebKitWebDriver-4.1
-%{_libdir}/libwebkit2gtk-4.1.so.*.*.*
-%ghost %{_libdir}/libwebkit2gtk-4.1.so.0
-%{_libdir}/libjavascriptcoregtk-4.1.so.*.*.*
-%ghost %{_libdir}/libjavascriptcoregtk-4.1.so.0
-%if %{with introspection}
-%{_libdir}/girepository-1.0/JavaScriptCore-4.1.typelib
-%{_libdir}/girepository-1.0/WebKit2-4.1.typelib
-%{_libdir}/girepository-1.0/WebKit2WebExtension-4.1.typelib
-%endif
-%if "%{_libexecdir}" != "%{_libdir}"
-%dir %{_libexecdir}/webkit2gtk-4.1
-%endif
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/MiniBrowser
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitGPUProcess
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitNetworkProcess
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/WebKitWebProcess
-%attr(755,root,root) %{_libexecdir}/webkit2gtk-4.1/jsc
-%dir %{_libdir}/webkit2gtk-4.1
-%dir %{_libdir}/webkit2gtk-4.1/injected-bundle
-%{_libdir}/webkit2gtk-4.1/injected-bundle/libwebkit2gtkinjectedbundle.so
-
-%files -n gtk-webkit4.1-devel
-%defattr(644,root,root,755)
-%{_libdir}/libwebkit2gtk-4.1.so
-%{_libdir}/libjavascriptcoregtk-4.1.so
-%if %{with introspection}
-%{_datadir}/gir-1.0/JavaScriptCore-4.1.gir
-%{_datadir}/gir-1.0/WebKit2-4.1.gir
-%{_datadir}/gir-1.0/WebKit2WebExtension-4.1.gir
-%endif
-%{_includedir}/webkitgtk-4.1
-%{_pkgconfigdir}/javascriptcoregtk-4.1.pc
-%{_pkgconfigdir}/webkit2gtk-4.1.pc
-%{_pkgconfigdir}/webkit2gtk-web-extension-4.1.pc
-
-%files -n gtk-webkit4.1-apidocs
-%defattr(644,root,root,755)
-%{_gidocdir}/javascriptcoregtk-4.1
-%{_gidocdir}/webkit2gtk-4.1
-%{_gidocdir}/webkit2gtk-web-extension-4.1
-%endif
-
-%if %{with gtk4}
-%files -n gtk-webkit6 -f WebKitGTK-6.0.lang
-%defattr(644,root,root,755)
-%doc NEWS
-%attr(755,root,root) %{_bindir}/WebKitWebDriver-6.0
-%{_libdir}/libjavascriptcoregtk-6.0.so.*.*.*
-%ghost %{_libdir}/libjavascriptcoregtk-6.0.so.1
-%{_libdir}/libwebkitgtk-6.0.so.*.*.*
-%ghost %{_libdir}/libwebkitgtk-6.0.so.4
-%if %{with introspection}
-%{_libdir}/girepository-1.0/JavaScriptCore-6.0.typelib
-%{_libdir}/girepository-1.0/WebKit-6.0.typelib
-%{_libdir}/girepository-1.0/WebKitWebProcessExtension-6.0.typelib
-%endif
-%if "%{_libexecdir}" != "%{_libdir}"
-%dir %{_libexecdir}/webkitgtk-6.0
-%endif
-%attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/MiniBrowser
-%attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/WebKitGPUProcess
-%attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/WebKitNetworkProcess
-%attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/WebKitWebProcess
-%attr(755,root,root) %{_libexecdir}/webkitgtk-6.0/jsc
-%dir %{_libdir}/webkitgtk-6.0
-%dir %{_libdir}/webkitgtk-6.0/injected-bundle
-%{_libdir}/webkitgtk-6.0/injected-bundle/libwebkitgtkinjectedbundle.so
-
-%files -n gtk-webkit6-devel
-%defattr(644,root,root,755)
-%{_libdir}/libwebkitgtk-6.0.so
-%{_libdir}/libjavascriptcoregtk-6.0.so
-%if %{with introspection}
-%{_datadir}/gir-1.0/JavaScriptCore-6.0.gir
-%{_datadir}/gir-1.0/WebKit-6.0.gir
-%{_datadir}/gir-1.0/WebKitWebProcessExtension-6.0.gir
-%endif
-%{_includedir}/webkitgtk-6.0
-%{_pkgconfigdir}/javascriptcoregtk-6.0.pc
-%{_pkgconfigdir}/webkitgtk-6.0.pc
-%{_pkgconfigdir}/webkitgtk-web-process-extension-6.0.pc
-
-%files -n gtk-webkit6-apidocs
-%defattr(644,root,root,755)
-%{_gidocdir}/javascriptcoregtk-6.0
-%{_gidocdir}/webkitgtk-6.0
-%{_gidocdir}/webkitgtk-web-process-extension-6.0
-%endif
