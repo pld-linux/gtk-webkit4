@@ -8,10 +8,6 @@
 #
 # Conditional build:
 %bcond_without	introspection	# GObject introspection
-%bcond_without	libsoup2	# webkit-4.0 (libsoup2 based) variant
-%bcond_without	libsoup3	# webkit-4.1 (libsoup3 based) variant (HTTP/2 support)
-%bcond_without	gtk3		# webkit-4.x (gtk3 based) variants
-%bcond_without	gtk4		# webkit-6.0 (gtk4/libsoup3 based) variant
 %bcond_without	sysprof		# sysprof profiling
 %bcond_without	wayland		# Wayland target (requires GTK+ wayland target)
 %ifarch x32
