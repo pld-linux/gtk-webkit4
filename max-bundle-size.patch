@@ -9,3 +9,13 @@
      endif ()
  
      if (ENABLE_UNIFIED_BUILDS)
+--- webkitgtk-2.50.6/Source/WebKit/WebProcess/InjectedBundle/API/gtk/DOM/WebKitDOMEvent.cpp.orig	2026-06-13 18:16:39.655384811 +0200
++++ webkitgtk-2.50.6/Source/WebKit/WebProcess/InjectedBundle/API/gtk/DOM/WebKitDOMEvent.cpp	2026-06-13 18:16:58.275283938 +0200
+@@ -29,6 +29,7 @@
+ #include "WebKitDOMEventTargetPrivate.h"
+ #include "WebKitDOMPrivate.h"
+ #include "ConvertToUTF8String.h"
++#include <WebCore/EventTargetInlines.h>
+ #include <wtf/GetPtr.h>
+ #include <wtf/RefPtr.h>
+ 
