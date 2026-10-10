@@ -27,7 +27,7 @@ Summary(pl.UTF-8):	Port osadzalnego komponentu WWW WebKit do GTK+ 3
 Name:		gtk-webkit4
 # 2.50.x is the last with webkit2gtk-4.0 library (gtk+3/libsoup-2 variant); other variants continuation in gtk-webkit4.1.spec
 Version:	2.50.6
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		X11/Libraries
 Source0:	https://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
